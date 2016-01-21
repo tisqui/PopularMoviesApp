@@ -20,19 +20,19 @@ import java.util.List;
 /**
  * Created by squirrel on 1/20/16.
  */
-public class GetJson {
+abstract public class GetJson {
     private final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private final String IMAGE_SIZE = "w185";
     private final String BASE_URL = "http://api.themoviedb.org/3/discover/movie";
     private final String SORT_TAG = "sort_by";
     private final String API_KEY_TAG = "api_key";
-    private final String API_KEY = "[INCERT_KEY_HERE]";
+    private final String API_KEY = "INCERT_KEY";
 
     private String LOG_TAG = GetJson.class.getSimpleName();
     private List<Image> mImagesList;
     private Uri mUri;
 
-    private String mStringUrl;
+    protected String mStringUrl;
     private String mJsonData;
 
     public GetJson(String sortType){
@@ -40,6 +40,8 @@ public class GetJson {
         mStringUrl = mUri.toString();
         mImagesList = new ArrayList<Image>();
     }
+
+    abstract protected void afterCompletionWhenDataDownloaded();
 
     public List<Image> getImagesList() {
         return mImagesList;
@@ -52,7 +54,7 @@ public class GetJson {
                 .build();
     }
 
-    public void processJson(){
+    public void execute(){
         DownloadJson downloadJson = new DownloadJson();
         downloadJson.execute(mStringUrl);
     }
@@ -86,16 +88,12 @@ public class GetJson {
 
                 //need to add base image url and image size to get complete image url
 
-                String posterLink = BASE_IMAGE_URL + "w185" + path;
+                String posterLink = BASE_IMAGE_URL + IMAGE_SIZE + path;
 
                 //String id, String title, String releaseDate, String overview,String voteAverage, String hasVideo, String posterPath
                 Image image = new Image(id, title, releaseDate, overview, voteAverage, hasVideo, posterLink);
 
                 this.mImagesList.add(image);
-            }
-
-            for(Image image : mImagesList){
-                Log.i(LOG_TAG, image.toString());
             }
 
         }catch (JSONException e){
@@ -156,11 +154,12 @@ public class GetJson {
         @Override
         protected void onPostExecute(String s) {
             mJsonData = s;
-            Log.v(LOG_TAG, "Data got from the stream: " + mJsonData);
+            Log.d(LOG_TAG, "Data got from the stream: " + mJsonData);
             if(mJsonData == null) {
-               Log.d(LOG_TAG, "Empty data downloaded");
+               Log.d(LOG_TAG, "No data downloaded");
             } else {
                 parseJson();
+                afterCompletionWhenDataDownloaded();
             }
         }
     }

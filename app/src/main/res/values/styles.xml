@@ -14,7 +14,7 @@
 
     <style name="ActionBarThemeOverlay" parent="">
         <item name="android:textColorPrimary">@color/primaryTextColorToolbar</item>
-        <item name="android:textColorHighlight">@color/primaryTextColorToolbar</item>
+        <item name="android:textColorHighlight">@color/hightlightTextColorPopup</item>
         <item name="android:actionMenuTextColor">@color/primaryTextColorToolbar</item>
         <item name="android:textColorSecondary">@color/primaryTextColorToolbar</item>
         <item name="android:background">@color/colorPrimary</item>
@@ -22,7 +22,7 @@
 
 
     <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/primaryTextColorToolbar</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -30,7 +30,7 @@
 
     <style name="Theme.PopularMoviesApplication.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColor">@color/primaryTextColorPopup</item>
-        <item name="android:background">@color/primaryTextColorPopup</item>
+        <item name="android:background">@color/popupBackground</item>
     </style>
 
 </resources>

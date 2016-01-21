@@ -29,6 +29,15 @@ public class ImageGridAdapter extends ArrayAdapter {
         inflater = LayoutInflater.from(context);
     }
 
+    @Override
+    public void clear() {
+        super.clear();
+    }
+
+    @Override
+    public void add(Object object) {
+        super.add(object);
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

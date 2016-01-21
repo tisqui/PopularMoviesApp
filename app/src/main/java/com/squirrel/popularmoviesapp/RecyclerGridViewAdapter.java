@@ -46,10 +46,11 @@ public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolde
         return (null != mImagesList ? mImagesList.size() : 0);
     }
 
-    public void updateImagesInGrid (List<Image> newImages){
+    public void updateImagesInGrid(List<Image> newImages){
         mImagesList = newImages;
         notifyDataSetChanged();
     }
+
 
     public Image getImage(int position){
         if(mImagesList != null){
