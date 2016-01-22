@@ -3,6 +3,6 @@
            android:id="@+id/image_holder"
            android:layout_width="185dp"
            android:layout_height="277dp"
-           android:scaleType="fitXY"
+           android:scaleType="centerCrop"
            android:clickable="true"
     />

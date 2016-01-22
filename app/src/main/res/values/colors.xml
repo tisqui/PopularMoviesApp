@@ -2,9 +2,12 @@
 <resources>
     <color name="colorPrimary">#00bcd4</color>
     <color name="colorPrimaryDark">#0097a7</color>
-    <color name="colorAccent">#eeff41</color>
+    <color name="colorAccent">#64dd17</color>
     <color name="primaryTextColorToolbar">#FFFFFF</color>
     <color name="popupBackground">#FFFFFF</color>
     <color name="primaryTextColorPopup">#0097a7</color>
-    <color name="hightlightTextColorPopup">#eeff41</color>
+    <color name="hightlightTextColorPopup">#64dd17</color>
+    <color name="textColorLabelWithColorBackground">#FFFFFF</color>
+    <color name="labelBackground">#00bcd4</color>
+    <color name="dividerColor">#e0e0e0</color>
 </resources>

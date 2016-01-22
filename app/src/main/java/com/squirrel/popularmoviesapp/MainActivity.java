@@ -2,6 +2,7 @@ package com.squirrel.popularmoviesapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
@@ -31,8 +32,13 @@ public class MainActivity extends BaseActivity {
         mSortOrder = getString(R.string.order_setting_default_value);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_recycler_view);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(gridLayoutManager);
+
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
+        }
+        else{
+            mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false));
+        }
 
         mRecyclerGridViewAdapter = new RecyclerGridViewAdapter(MainActivity.this, new ArrayList<Image>());
         mRecyclerView.setAdapter(mRecyclerGridViewAdapter);
