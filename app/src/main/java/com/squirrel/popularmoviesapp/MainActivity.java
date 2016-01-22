@@ -4,21 +4,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private Toolbar mToolbar;
     private List<Image> mImagesList = new ArrayList<Image>();
     private RecyclerView mRecyclerView;
     private RecyclerGridViewAdapter mRecyclerGridViewAdapter;
@@ -38,6 +36,23 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerGridViewAdapter = new RecyclerGridViewAdapter(MainActivity.this, new ArrayList<Image>());
         mRecyclerView.setAdapter(mRecyclerGridViewAdapter);
+
+        mRecyclerView.addOnItemTouchListener(new FilmClickListener(this, mRecyclerView,
+                new FilmClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(MainActivity.this, FilmDetailActivity.class);
+                        intent.putExtra(FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                        Intent intent = new Intent(MainActivity.this, FilmDetailActivity.class);
+                        intent.putExtra(FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
+                        startActivity(intent);
+                    }
+                }));
 
     }
 
@@ -80,24 +95,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    protected Toolbar getToolbar() {
-        if (mToolbar == null) {
-            mToolbar = (Toolbar) findViewById(R.id.application_toolbar);
-            if (mToolbar != null) {
-                setSupportActionBar(mToolbar);
-            }
-        }
-        return mToolbar;
-    }
-
-    protected Toolbar activateToolbarWithHomeEnabled() {
-        getToolbar();
-        if (mToolbar != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        return mToolbar;
     }
 
 }

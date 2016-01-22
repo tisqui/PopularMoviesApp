@@ -12,6 +12,12 @@
 
     <style name="Theme.PopularMoviesApplication" parent="AppTheme"/>
 
+    <!-- Settings activity theme. -->
+    <style name="SettingsTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    </style>
+
     <style name="ActionBarThemeOverlay" parent="">
         <item name="android:textColorPrimary">@color/primaryTextColorToolbar</item>
         <item name="android:textColorHighlight">@color/hightlightTextColorPopup</item>
@@ -26,11 +32,15 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="Theme.PopularMoviesApplication.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.PopularMoviesApplication.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="Theme.PopularMoviesApplication.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColor">@color/primaryTextColorPopup</item>
         <item name="android:background">@color/popupBackground</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>

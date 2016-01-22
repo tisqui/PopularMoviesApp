@@ -15,6 +15,7 @@ import java.util.List;
  * Created by squirrel on 1/20/16.
  */
 public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolder> {
+
     private List<Image> mImagesList;
     private Context mContext;
     private final String LOG_TAG = RecyclerGridViewAdapter.class.getSimpleName();

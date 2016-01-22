@@ -6,4 +6,5 @@
     <string name="order_setting_dialog_title">Films sorting order</string>
     <string name="order_setting_default_value">popularity.desc</string>
     <string name="settings_activity_title">Settings</string>
+    <string name="title_activity_film_detail">Movie details</string>
 </resources>

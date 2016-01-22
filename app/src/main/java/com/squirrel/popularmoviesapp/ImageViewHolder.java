@@ -7,7 +7,7 @@ import android.widget.ImageView;
 /**
  * Created by squirrel on 1/20/16.
  */
-public class ImageViewHolder extends RecyclerView.ViewHolder  {
+public class ImageViewHolder extends RecyclerView.ViewHolder {
 
     protected ImageView thumbnailImage;
 
@@ -15,4 +15,5 @@ public class ImageViewHolder extends RecyclerView.ViewHolder  {
         super(itemView);
         this.thumbnailImage = (ImageView) itemView.findViewById(R.id.image_holder);
     }
+
 }

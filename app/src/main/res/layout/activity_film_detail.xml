@@ -6,8 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.squirrel.popularmoviesapp.MainActivity">
+    tools:context="com.squirrel.popularmoviesapp.FilmDetailActivity">
 
-    <include layout="@layout/content_main"/>
+    <include layout="@layout/content_film_detail"/>
+
 
 </android.support.design.widget.CoordinatorLayout>
