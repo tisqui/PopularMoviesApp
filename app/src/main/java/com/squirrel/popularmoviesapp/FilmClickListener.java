@@ -48,7 +48,6 @@ public class FilmClickListener implements RecyclerView.OnItemTouchListener {
         View view = rv.findChildViewUnder(e.getX(), e.getY());
         if( view != null && mOnItemClickListener != null && mGestureDetector.onTouchEvent(e)){
             mOnItemClickListener.onItemClick(view, rv.getChildLayoutPosition(view));
-            //return true;
         }
         return false;
     }

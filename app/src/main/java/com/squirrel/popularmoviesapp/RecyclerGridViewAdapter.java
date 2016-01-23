@@ -16,11 +16,11 @@ import java.util.List;
  */
 public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolder> {
 
-    private List<Image> mImagesList;
+    private List<Film> mImagesList;
     private Context mContext;
     private final String LOG_TAG = RecyclerGridViewAdapter.class.getSimpleName();
 
-    public RecyclerGridViewAdapter(Context context, List<Image> mImagesList) {
+    public RecyclerGridViewAdapter(Context context, List<Film> mImagesList) {
         mContext = context;
         this.mImagesList = mImagesList;
     }
@@ -34,9 +34,9 @@ public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolde
 
     @Override
     public void onBindViewHolder(ImageViewHolder holder, int position) {
-        Image imageItem = mImagesList.get(position);
-        Log.d(LOG_TAG, "Processing the item: " + imageItem.getTitle() + " " + position);
-        Picasso.with(mContext).load(imageItem.getPosterPath())
+        Film filmItem = mImagesList.get(position);
+        Log.d(LOG_TAG, "Processing the item: " + filmItem.getTitle() + " " + position);
+        Picasso.with(mContext).load(filmItem.getPosterPath())
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.thumbnailImage);
@@ -47,13 +47,13 @@ public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolde
         return (null != mImagesList ? mImagesList.size() : 0);
     }
 
-    public void updateImagesInGrid(List<Image> newImages){
-        mImagesList = newImages;
+    public void updateImagesInGrid(List<Film> newFilms){
+        mImagesList = newFilms;
         notifyDataSetChanged();
     }
 
 
-    public Image getImage(int position){
+    public Film getImage(int position){
         if(mImagesList != null){
             return mImagesList.get(position);
         }

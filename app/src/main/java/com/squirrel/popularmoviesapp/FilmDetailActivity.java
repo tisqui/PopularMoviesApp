@@ -15,9 +15,11 @@ public class FilmDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_film_detail);
         activateToolbarWithHomeEnabled();
 
+        //get the film data from the Intent
         Intent intent = getIntent();
-        Image film = (Image) intent.getSerializableExtra(FILM_DETAILS_KEY);
+        Film film = (Film) intent.getSerializableExtra(FILM_DETAILS_KEY);
 
+        //set the film data to the views
         TextView filmTitle = (TextView) findViewById(R.id.film_detail_title);
         filmTitle.setText(film.getTitle());
 
@@ -27,6 +29,7 @@ public class FilmDetailActivity extends BaseActivity {
         TextView votesLabel = (TextView) findViewById(R.id.film_detail_average_votes);
         votesLabel.setText("Rating: " + film.getVoteAverage()+"/10");
 
+        //Load the film poster image in the ImageView
         ImageView filmPoster = (ImageView) findViewById(R.id.film_detail_poster);
         Picasso.with(this).load(film.getPosterPath())
                 .error(R.drawable.placeholder)

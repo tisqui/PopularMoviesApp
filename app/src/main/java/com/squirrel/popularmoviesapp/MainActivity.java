@@ -12,13 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private List<Image> mImagesList = new ArrayList<Image>();
     private RecyclerView mRecyclerView;
     private RecyclerGridViewAdapter mRecyclerGridViewAdapter;
     private String mSortOrder;
@@ -31,8 +29,10 @@ public class MainActivity extends BaseActivity {
 
         mSortOrder = getString(R.string.order_setting_default_value);
 
+        //Create RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_recycler_view);
 
+        //Set the number of columns in the grid depending on the orientation
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
         }
@@ -40,9 +40,10 @@ public class MainActivity extends BaseActivity {
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false));
         }
 
-        mRecyclerGridViewAdapter = new RecyclerGridViewAdapter(MainActivity.this, new ArrayList<Image>());
+        mRecyclerGridViewAdapter = new RecyclerGridViewAdapter(MainActivity.this, new ArrayList<Film>());
         mRecyclerView.setAdapter(mRecyclerGridViewAdapter);
 
+        //set the on touch listener for the RecyclerView. The same action for tap and long tap
         mRecyclerView.addOnItemTouchListener(new FilmClickListener(this, mRecyclerView,
                 new FilmClickListener.OnItemClickListener() {
                     @Override
@@ -62,6 +63,9 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    /**
+     * Update the RecyclerView data when the settings were changed
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -88,18 +92,13 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

@@ -52,7 +52,6 @@
                         android:id="@+id/film_detail_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Film title"
                         android:textSize="@dimen/title_text_size"/>
 
                     <TextView
@@ -61,7 +60,6 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/subtitle_top_bottom_padding"
                         android:paddingTop="@dimen/subtitle_top_bottom_padding"
-                        android:text="2015"
                         android:textSize="@dimen/subtitle_text_size"/>
 
                     <TextView
@@ -72,7 +70,6 @@
                         android:gravity="center"
                         android:paddingBottom="@dimen/label_top_bottom_padding"
                         android:paddingTop="@dimen/label_top_bottom_padding"
-                        android:text="Rating: 7.8/10"
                         android:textColor="@color/textColorLabelWithColorBackground"
                         android:textSize="@dimen/label_text_size"
                         android:textStyle="bold"/>
@@ -104,7 +101,6 @@
                 android:paddingLeft="@dimen/left_right_padding"
                 android:paddingRight="@dimen/left_right_padding"
                 android:paddingTop="@dimen/padding_top"
-                android:text="Film description"
                 android:textSize="@dimen/paragraph_text_size"/>
 
         </LinearLayout>

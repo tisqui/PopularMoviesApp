@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by squirrel on 1/20/16.
  */
-public class Image implements Serializable {
+public class Film implements Serializable {
     private final Long serialVersion = 1L;
     private String mId;
     private String mTitle;
@@ -15,8 +15,8 @@ public class Image implements Serializable {
     private String mHasVideo;
     private String mPosterPath;
 
-    public Image(String id, String title, String releaseDate, String overview,
-                 String voteAverage, String hasVideo, String posterPath) {
+    public Film(String id, String title, String releaseDate, String overview,
+                String voteAverage, String hasVideo, String posterPath) {
         mId = id;
         mTitle = title;
         mReleaseDate = releaseDate;

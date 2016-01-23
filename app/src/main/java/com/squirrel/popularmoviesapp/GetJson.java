@@ -19,17 +19,19 @@ import java.util.List;
 
 /**
  * Created by squirrel on 1/20/16.
+ * Perform the request, process the json data in responce. Handling only one request:
+ * - get 1st page of the list of movies with parameters: sorting order
  */
 abstract public class GetJson {
     private final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
-    private final String IMAGE_SIZE = "w185";
+    private final String IMAGE_SIZE = "w342";
     private final String BASE_URL = "http://api.themoviedb.org/3/discover/movie";
     private final String SORT_TAG = "sort_by";
     private final String API_KEY_TAG = "api_key";
-    private final String API_KEY = "INCERT_KEY";
+    private final String API_KEY = BuildConfig.MY_API_KEY;
 
     private String LOG_TAG = GetJson.class.getSimpleName();
-    private List<Image> mImagesList;
+    private List<Film> mImagesList;
     private Uri mUri;
 
     protected String mStringUrl;
@@ -38,15 +40,19 @@ abstract public class GetJson {
     public GetJson(String sortType){
         getUrl(sortType);
         mStringUrl = mUri.toString();
-        mImagesList = new ArrayList<Image>();
+        mImagesList = new ArrayList<Film>();
     }
 
     abstract protected void afterCompletionWhenDataDownloaded();
 
-    public List<Image> getImagesList() {
+    public List<Film> getImagesList() {
         return mImagesList;
     }
 
+    /**
+     * Constructs the Url using the sorting type
+     * @param sortType - order of the films in the list
+     */
     private void getUrl(String sortType){
         mUri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(SORT_TAG, sortType)
@@ -54,11 +60,17 @@ abstract public class GetJson {
                 .build();
     }
 
+    /**
+     * Executes the json downloading and parsing
+     */
     public void execute(){
         DownloadJson downloadJson = new DownloadJson();
         downloadJson.execute(mStringUrl);
     }
 
+    /**
+     * Parses json of the films list into list of the FilmObjects
+     */
     public void parseJson(){
         final String RESULTS_OBJ = "results";
         final String POSTER_PATH = "poster_path";
@@ -91,7 +103,7 @@ abstract public class GetJson {
                 String posterLink = BASE_IMAGE_URL + IMAGE_SIZE + path;
 
                 //String id, String title, String releaseDate, String overview,String voteAverage, String hasVideo, String posterPath
-                Image image = new Image(id, title, releaseDate, overview, voteAverage, hasVideo, posterLink);
+                Film image = new Film(id, title, releaseDate, overview, voteAverage, hasVideo, posterLink);
 
                 this.mImagesList.add(image);
             }
@@ -158,6 +170,7 @@ abstract public class GetJson {
             if(mJsonData == null) {
                Log.d(LOG_TAG, "No data downloaded");
             } else {
+                //parse json and complete only when the json is downloaded
                 parseJson();
                 afterCompletionWhenDataDownloaded();
             }
