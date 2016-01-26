@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.squareup.picasso.Picasso;
+import com.squirrel.popularmoviesapp.model.Movie;
 
 import java.util.List;
 
@@ -16,11 +17,11 @@ import java.util.List;
  */
 public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolder> {
 
-    private List<Film> mImagesList;
+    private List<Movie> mImagesList;
     private Context mContext;
     private final String LOG_TAG = RecyclerGridViewAdapter.class.getSimpleName();
 
-    public RecyclerGridViewAdapter(Context context, List<Film> mImagesList) {
+    public RecyclerGridViewAdapter(Context context, List<Movie> mImagesList) {
         mContext = context;
         this.mImagesList = mImagesList;
     }
@@ -34,9 +35,9 @@ public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolde
 
     @Override
     public void onBindViewHolder(ImageViewHolder holder, int position) {
-        Film filmItem = mImagesList.get(position);
+        Movie filmItem = mImagesList.get(position);
         Log.d(LOG_TAG, "Processing the item: " + filmItem.getTitle() + " " + position);
-        Picasso.with(mContext).load(filmItem.getPosterPath())
+        Picasso.with(mContext).load(filmItem.getFullPosterUrl())
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.thumbnailImage);
@@ -47,13 +48,13 @@ public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolde
         return (null != mImagesList ? mImagesList.size() : 0);
     }
 
-    public void updateImagesInGrid(List<Film> newFilms){
+    public void updateImagesInGrid(List<Movie> newFilms){
         mImagesList = newFilms;
         notifyDataSetChanged();
     }
 
 
-    public Film getImage(int position){
+    public Movie getImage(int position){
         if(mImagesList != null){
             return mImagesList.get(position);
         }
