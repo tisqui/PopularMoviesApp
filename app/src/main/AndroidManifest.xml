@@ -31,7 +31,7 @@
             </meta-data>
         </activity>
         <activity
-            android:name=".FilmDetailActivity"
+            android:name=".MovieDetailActivity"
             android:label="@string/title_activity_film_detail"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">

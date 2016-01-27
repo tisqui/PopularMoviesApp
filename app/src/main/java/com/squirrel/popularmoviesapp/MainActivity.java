@@ -47,23 +47,24 @@ public class MainActivity extends BaseActivity {
         }
 
         mRecyclerGridViewAdapter = new RecyclerGridViewAdapter(MainActivity.this, new ArrayList<Movie>());
+//        mRecyclerView.setItemAnimator(new SlideInUpAnimator());
         mRecyclerView.setAdapter(mRecyclerGridViewAdapter);
 
         //set the on touch listener for the RecyclerView. The same action for tap and long tap
-        mRecyclerView.addOnItemTouchListener(new FilmClickListener(this, mRecyclerView,
-                new FilmClickListener.OnItemClickListener() {
+        mRecyclerView.addOnItemTouchListener(new MovieClickListener(this, mRecyclerView,
+                new MovieClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-//                        Intent intent = new Intent(MainActivity.this, FilmDetailActivity.class);
-//                        intent.putExtra(FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
-//                        startActivity(intent);
+                        Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
+                        intent.putExtra(FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
+                        startActivity(intent);
                     }
 
                     @Override
                     public void onItemLongClick(View view, int position) {
-//                        Intent intent = new Intent(MainActivity.this, FilmDetailActivity.class);
-//                        intent.putExtra(FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
-//                        startActivity(intent);
+                        Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
+                        intent.putExtra(FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
+                        startActivity(intent);
                     }
                 }));
 
@@ -116,10 +117,9 @@ public class MainActivity extends BaseActivity {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             mSortOrder = sharedPref.getString(getString(R.string.order_key_text), getString(R.string.order_setting_default_value));
 
-            String sortBy = "popularity.desc";
             String page = "1";
             MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
-            apiService.getMovies(sortBy, page, new MoviesAPIService.APICallback<List<Movie>>() {
+            apiService.getMovies(mSortOrder, page, new MoviesAPIService.APICallback<List<Movie>>() {
                 @Override
                 public void onSuccess(List<Movie> result) {
                     mRecyclerGridViewAdapter.updateImagesInGrid(result);

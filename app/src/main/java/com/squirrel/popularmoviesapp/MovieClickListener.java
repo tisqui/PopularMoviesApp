@@ -10,7 +10,7 @@ import android.view.View;
 /**
  * Created by squirrel on 1/21/16.
  */
-public class FilmClickListener implements RecyclerView.OnItemTouchListener {
+public class MovieClickListener implements RecyclerView.OnItemTouchListener {
 
     public static interface OnItemClickListener{
         public void onItemClick(View view, int position);
@@ -20,7 +20,7 @@ public class FilmClickListener implements RecyclerView.OnItemTouchListener {
     private OnItemClickListener mOnItemClickListener;
     private GestureDetector mGestureDetector;
 
-    public FilmClickListener(Context context, final RecyclerView recyclerView, OnItemClickListener onItemClickListener){
+    public MovieClickListener(Context context, final RecyclerView recyclerView, OnItemClickListener onItemClickListener){
         mOnItemClickListener = onItemClickListener;
         mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
             public boolean onSingleTapUp(MotionEvent motionEvent){

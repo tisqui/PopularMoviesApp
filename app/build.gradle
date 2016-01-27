@@ -20,6 +20,12 @@ android {
     buildTypes.each {
         it.buildConfigField 'String', 'MY_API_KEY', MyThemoviedbApiKey
     }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
 }
 
 dependencies {
@@ -32,4 +38,5 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
     compile 'org.parceler:parceler:0.2.13'
+    compile 'com.jakewharton:butterknife:7.0.1'
 }

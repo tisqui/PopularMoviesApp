@@ -35,9 +35,9 @@ public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolde
 
     @Override
     public void onBindViewHolder(ImageViewHolder holder, int position) {
-        Movie filmItem = mImagesList.get(position);
-        Log.d(LOG_TAG, "Processing the item: " + filmItem.getTitle() + " " + position);
-        Picasso.with(mContext).load(filmItem.getFullPosterUrl())
+        Movie movieItem = mImagesList.get(position);
+        Log.d(LOG_TAG, "Processing the item: " + movieItem.getTitle() + " " + position);
+        Picasso.with(mContext).load(movieItem.getFullPosterUrl())
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.thumbnailImage);
