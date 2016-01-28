@@ -29,25 +29,29 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        GridLayoutManager gridLayoutManager;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getToolbar();
 
         mSortOrder = getString(R.string.order_setting_default_value);
 
+
         //Create RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_recycler_view);
 
         //Set the number of columns in the grid depending on the orientation
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
+            gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+            mRecyclerView.setLayoutManager(gridLayoutManager);
         }
         else{
-            mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false));
+            gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
+            mRecyclerView.setLayoutManager(gridLayoutManager);
         }
 
         mRecyclerGridViewAdapter = new RecyclerGridViewAdapter(MainActivity.this, new ArrayList<Movie>());
-//        mRecyclerView.setItemAnimator(new SlideInUpAnimator());
         mRecyclerView.setAdapter(mRecyclerGridViewAdapter);
 
         //set the on touch listener for the RecyclerView. The same action for tap and long tap
@@ -67,6 +71,29 @@ public class MainActivity extends BaseActivity {
                         startActivity(intent);
                     }
                 }));
+
+        //set the scroll listener for the recycler view
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                mSortOrder = sharedPref.getString(getString(R.string.order_key_text), getString(R.string.order_setting_default_value));
+
+                MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
+                apiService.getMovies(mSortOrder, Integer.toString(page), new MoviesAPIService.APICallback<List<Movie>>() {
+                    @Override
+                    public void onSuccess(List<Movie> result) {
+                        mRecyclerGridViewAdapter.addImagesToGrid(result);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e(LOG_TAG, t.getLocalizedMessage());
+                        Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
 
         //TEST RETROFIT
 //        String BASE_URL = "http://api.themoviedb.org/3/";
@@ -133,6 +160,7 @@ public class MainActivity extends BaseActivity {
             });
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

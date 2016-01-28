@@ -53,6 +53,12 @@ public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolde
         notifyDataSetChanged();
     }
 
+    public void addImagesToGrid(List<Movie> moreMovies){
+        mImagesList.addAll(moreMovies);
+        int curSize = getItemCount();
+        notifyItemRangeInserted(curSize, mImagesList.size() - 1);
+    }
+
 
     public Movie getImage(int position){
         if(mImagesList != null){

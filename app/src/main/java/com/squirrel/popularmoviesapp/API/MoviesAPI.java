@@ -15,4 +15,6 @@ public interface MoviesAPI {
     public Call<ResponseWrapper<Movie>> getMovies(@Query("sort_by") String sort_by,
                           @Query("page") String page_num,
                           @Query("api_key") String api_key);
+
+
 }
