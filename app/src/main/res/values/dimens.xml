@@ -25,4 +25,11 @@
     <dimen name="divider_margin">16sp</dimen>
     <dimen name="top_block_min_width">140dp</dimen>
 
+    <!-- Trailers list -->
+    <dimen name="trailer_list_item_height">64dp</dimen>
+    <dimen name="trailer_title_text_size">18sp</dimen>
+    <dimen name="trailer_list_left_right_padding">16sp</dimen>
+    <dimen name="trailer_list_top_bottom_padding">16dp</dimen>
+    <dimen name="trailer_list_internal_left_right_padding">8dp</dimen>
+
 </resources>

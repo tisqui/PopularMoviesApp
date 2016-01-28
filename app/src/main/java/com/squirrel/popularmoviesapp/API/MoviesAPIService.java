@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squirrel.popularmoviesapp.model.Movie;
 import com.squirrel.popularmoviesapp.model.ResponseWrapper;
+import com.squirrel.popularmoviesapp.model.Review;
+import com.squirrel.popularmoviesapp.model.Trailer;
 
 import java.util.List;
 
@@ -41,10 +43,38 @@ public class MoviesAPIService {
         mMoviesAPI = mRetrofit.create(MoviesAPI.class);
     }
 
+    /**
+     * Get movies list from API
+     * @param sortBy sorting order parameter
+     * @param page number of the page we are requesting
+     * @param callback call back to get the list of the movies from the object that wraps it
+     */
     public void getMovies(String sortBy, String page, APICallback<List<Movie>> callback){
         Call<ResponseWrapper<Movie>> call = mMoviesAPI.getMovies(sortBy, page, API_KEY);
         get(call, callback);
     }
+
+    /**
+     * Get trailers from the API
+     * @param movieId the id of the movie we are requesting trailers from
+     * @param callback call back to get the list of the trailers from the object that wraps it
+     */
+    public void getTrailers(String movieId, APICallback<List<Trailer>> callback){
+        Call<ResponseWrapper<Trailer>> call = mMoviesAPI.getTrailers(movieId, API_KEY);
+        get(call, callback);
+    }
+
+    /**
+     * Get reviews from API
+     * @param movieId
+     * @param page
+     * @param callback call back to get the list of the reviews from the object that wraps it
+     */
+    public void getReviews(String movieId, String page, APICallback<List<Review>> callback){
+        Call<ResponseWrapper<Review>> call = mMoviesAPI.getReviews(movieId, page, API_KEY);
+        get(call, callback);
+    }
+
 
     private <T> void get(Call<ResponseWrapper<T>> call, final APICallback<List<T>> callback){
 
