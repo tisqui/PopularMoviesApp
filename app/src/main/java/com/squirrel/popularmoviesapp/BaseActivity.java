@@ -10,6 +10,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     public static final String FILM_DETAILS_KEY = "FILM_DETAILS";
+    public static final String REVIEWS_KEY = "REVIEWS";
 
     protected Toolbar getToolbar() {
         if (mToolbar == null) {

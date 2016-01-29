@@ -18,15 +18,15 @@ public class TrailersListAdapter extends ArrayAdapter<Trailer> {
 
     private ArrayList<Trailer> mTrailersList;
 
-    public TrailersListAdapter(Context context, ArrayList<Trailer> users) {
-        super(context, 0, users);
-        mTrailersList = users;
+    public TrailersListAdapter(Context context, ArrayList<Trailer> trailers) {
+        super(context, 0, trailers);
+        mTrailersList = trailers;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        Trailer trailer = getItem(position);
+        final Trailer trailer = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.trailers_list_item, parent, false);
@@ -36,6 +36,7 @@ public class TrailersListAdapter extends ArrayAdapter<Trailer> {
         // Populate the data into the template view using the data object
         trailerName.setText(trailer.getName());
         // Return the completed view to render on screen
+
         return convertView;
     }
 

@@ -37,7 +37,6 @@ public class MainActivity extends BaseActivity {
 
         mSortOrder = getString(R.string.order_setting_default_value);
 
-
         //Create RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_recycler_view);
 
@@ -94,43 +93,6 @@ public class MainActivity extends BaseActivity {
                 });
             }
         });
-
-        //TEST RETROFIT
-//        String BASE_URL = "http://api.themoviedb.org/3/";
-//
-//        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(BASE_URL)
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .build();
-//
-//        MoviesAPI apiService = retrofit.create(MoviesAPI.class);
-//        String sortBy = "popularity.desc";
-//        String API_KEY = "3db5ceb6c6b91619aff5af60a60a70cc";
-//        String page = "1";
-//
-//        Call<ResponseWrapper<Movie>> call = apiService.getMovies(sortBy, page, API_KEY);
-//
-//        call.enqueue(new Callback<ResponseWrapper<Movie>>() {
-//            @Override
-//            public void onResponse(Response<ResponseWrapper<Movie>> response) {
-//                int statusCode = response.code();
-//                List<Movie> movies = response.body().getResults();
-//
-//                String res="";
-//                for(Movie movie : movies){
-//                    res += movie.toString()+"\n";
-//                }
-//                Toast.makeText(MainActivity.this,"RESULTS:"+ res`, Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//                Toast.makeText(MainActivity.this,"NOT WORKING BITCH!!!!" + t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
 
     }
 

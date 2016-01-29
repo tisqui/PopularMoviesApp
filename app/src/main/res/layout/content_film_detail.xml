@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,11 +14,12 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -43,8 +43,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/film_detail_poster"
-                    android:orientation="vertical"
                     android:minWidth="@dimen/top_block_min_width"
+                    android:orientation="vertical"
                     android:paddingLeft="@dimen/internal_left_right_padding"
                     android:paddingRight="@dimen/internal_left_right_padding">
 
@@ -52,6 +52,7 @@
                         android:id="@+id/film_detail_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/movie_details_alighn_with_button"
                         android:textSize="@dimen/title_text_size"/>
 
                     <TextView
@@ -59,6 +60,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/subtitle_top_bottom_padding"
+                        android:paddingLeft="@dimen/movie_details_alighn_with_button"
                         android:paddingTop="@dimen/subtitle_top_bottom_padding"
                         android:textSize="@dimen/subtitle_text_size"/>
 
@@ -66,13 +68,22 @@
                         android:id="@+id/film_detail_average_votes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/labelBackground"
-                        android:gravity="center"
                         android:paddingBottom="@dimen/label_top_bottom_padding"
+                        android:paddingLeft="@dimen/movie_details_alighn_with_button"
                         android:paddingTop="@dimen/label_top_bottom_padding"
                         android:textColor="@color/textColorLabelWithColorBackground"
                         android:textSize="@dimen/label_text_size"
                         android:textStyle="bold"/>
+
+                    <Button
+                        android:id="@+id/reviews_button"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_top"
+                        android:padding="@dimen/padding_top"
+                        android:text="@string/reviews_button_text"/>
+
                 </LinearLayout>
 
                 <ImageView
@@ -96,7 +107,7 @@
             <TextView
                 android:id="@+id/film_detail_overview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/padding_bottom"
                 android:paddingLeft="@dimen/left_right_padding"
                 android:paddingRight="@dimen/left_right_padding"
@@ -115,25 +126,25 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/padding_bottom"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/trailers_lis_title_bottom_padding"
                 android:paddingLeft="@dimen/left_right_padding"
                 android:paddingRight="@dimen/left_right_padding"
                 android:paddingTop="@dimen/padding_top"
-                android:textSize="@dimen/subtitle_text_size"
+                android:text="@string/trailers_list_title"
                 android:textColor="@color/trailerTitleColor"
-                android:text="@string/trailers_list_title"/>
+                android:textSize="@dimen/subtitle_text_size"/>
 
             <ListView
                 android:id="@+id/listview_trailers"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/padding_bottom"
+                android:layout_height="@dimen/list_view_height"
+                android:divider="@null"
+                android:dividerHeight="@dimen/zero_divider_height"
                 android:paddingLeft="@dimen/left_right_padding"
                 android:paddingRight="@dimen/left_right_padding"/>
 
         </LinearLayout>
 
     </ScrollView>
-
 </LinearLayout>

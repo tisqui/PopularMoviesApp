@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,13 +28,26 @@ public class MovieDetailActivity extends BaseActivity {
 
     private static final String LOG_TAG = MovieDetailActivity.class.getSimpleName();
 
-    @Bind(R.id.film_detail_title) TextView mMovieTitle;
-    @Bind(R.id.film_detail_year) TextView mYearLabel;
-    @Bind(R.id.film_detail_average_votes) TextView mVotesLabel;
-    @Bind(R.id.film_detail_poster) ImageView mMoviePoster;
-    @Bind(R.id.film_detail_overview) TextView mMovieDescription;
+    @Bind(R.id.film_detail_title)
+    TextView mMovieTitle;
 
-    @Bind(R.id.listview_trailers) ListView mListViewTrailers;
+    @Bind(R.id.film_detail_year)
+    TextView mYearLabel;
+
+    @Bind(R.id.film_detail_average_votes)
+    TextView mVotesLabel;
+
+    @Bind(R.id.film_detail_poster)
+    ImageView mMoviePoster;
+
+    @Bind(R.id.film_detail_overview)
+    TextView mMovieDescription;
+
+    @Bind(R.id.reviews_button)
+    Button mReviewsButton;
+
+    @Bind(R.id.listview_trailers)
+    ListView mListViewTrailers;
 
     private ArrayList<Trailer> mArrayListOfTrailers;
     private TrailersListAdapter mTrailersListAdapter;
@@ -69,7 +83,25 @@ public class MovieDetailActivity extends BaseActivity {
         mTrailersListAdapter = new TrailersListAdapter(this, mArrayListOfTrailers);
         mListViewTrailers.setAdapter(mTrailersListAdapter);
 
+        mReviewsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MovieDetailActivity.this, MovieReviewsActivity.class);
+                intent.putExtra(REVIEWS_KEY, mMovie);
+                startActivityForResult(intent, 1);
+            }
+        });
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                mMovie = (Movie) data.getSerializableExtra(FILM_DETAILS_KEY);
+            }
+        }
     }
 
     @Override
@@ -81,6 +113,11 @@ public class MovieDetailActivity extends BaseActivity {
                 @Override
                 public void onSuccess(List<Trailer> result) {
                     mTrailersListAdapter.addAll(result);
+
+//                    ViewGroup.LayoutParams params = mListViewTrailers.getLayoutParams();
+//                    params.height = result.size() * 64;
+//                    mListViewTrailers.setLayoutParams(params);
+//                    mListViewTrailers.requestLayout();
                 }
 
                 @Override
@@ -101,13 +138,14 @@ public class MovieDetailActivity extends BaseActivity {
     }
 
     //play youtube video in the youtube app our in the webview if there is no player
-    public void playTrailer(String videoKey){
+    public void playTrailer(String videoKey) {
         try{
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoKey));
+            intent.putExtra("force_fullscreen",true);
             startActivity(intent);
         }catch (ActivityNotFoundException ex){
             Intent intent=new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://www.youtube.com/watch?v="+videoKey));
+                    Uri.parse(getString(R.string.YOUTUBE_BASEURL)+videoKey));
             startActivity(intent);
         }
     }

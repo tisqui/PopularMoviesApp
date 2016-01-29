@@ -39,6 +39,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.squirrel.popularmoviesapp.MainActivity"/>
         </activity>
+        <activity
+            android:name=".MovieReviewsActivity"
+            android:label="@string/title_activity_movie_reviews"
+            android:parentActivityName=".MovieDetailActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.squirrel.popularmoviesapp.MovieDetailActivity"/>
+        </activity>
     </application>
 
 </manifest>

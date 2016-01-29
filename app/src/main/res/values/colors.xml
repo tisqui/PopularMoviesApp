@@ -7,9 +7,11 @@
     <color name="popupBackground">#FFFFFF</color>
     <color name="primaryTextColorPopup">#0097a7</color>
     <color name="hightlightTextColorPopup">#64dd17</color>
-    <color name="textColorLabelWithColorBackground">#FFFFFF</color>
+    <color name="textColorLabelWithColorBackground">#00bcd4</color>
     <color name="labelBackground">#00bcd4</color>
     <color name="dividerColor">#e0e0e0</color>
-
     <color name="trailerTitleColor">#00bcd4</color>
+    <color name="reviewsListTitleBackground">#64dd17</color>
+    <color name="reviewsListTitleTextColor">#FFFFFF</color>
+    <color name="reviewsAuthorNameColor">#00bcd4</color>
 </resources>

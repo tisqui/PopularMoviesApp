@@ -13,4 +13,7 @@
     <string name="title_activity_film_detail">Movie details</string>
     <string name="trailers_list_title">Trailers</string>
     <string name="YOUTUBE_BASE_URL">https://www.youtube.com/watch?v=</string>
+    <string name="YOUTUBE_BASEURL">http://www.youtube.com/watch?v=</string>
+    <string name="title_activity_movie_reviews">MovieReviewsActivity</string>
+    <string name="reviews_button_text">Read Reviews</string>
 </resources>

@@ -4,15 +4,14 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <!-- Film details screen -->
-
     <!-- Text  -->
     <dimen name="title_text_size">24sp</dimen>
     <dimen name="subtitle_text_size">18sp</dimen>
     <dimen name="paragraph_text_size">16sp</dimen>
     <dimen name="label_text_size">14sp</dimen>
 
-    <!-- Spaces -->
+    <!-- Film details screen -->
+
     <dimen name="padding_top">16dp</dimen>
     <dimen name="padding_bottom">16dp</dimen>
     <dimen name="margin_bottom">16dp</dimen>
@@ -24,6 +23,10 @@
     <dimen name="label_left_right_margin">8dp</dimen>
     <dimen name="divider_margin">16dp</dimen>
     <dimen name="top_block_min_width">140dp</dimen>
+    <dimen name="movie_details_alighn_with_button">4dp</dimen>
+    <dimen name="list_view_height">200dp</dimen>
+    <dimen name="zero_divider_height">0dp</dimen>
+    <dimen name="trailers_lis_title_bottom_padding">8dp</dimen>
 
     <!-- Trailers list -->
     <dimen name="trailer_list_item_height">64dp</dimen>
@@ -31,6 +34,10 @@
     <dimen name="trailer_list_left_right_padding">16dp</dimen>
     <dimen name="trailer_list_top_bottom_padding">16dp</dimen>
     <dimen name="trailer_list_internal_left_right_padding">16dp</dimen>
-    <dimen name="trailer_title_max_width">220dp</dimen>
+    <dimen name="trailer_title_max_width">280dp</dimen>
+
+    <!-- Reviews list -->
+    <dimen name="reviews_list_top_bottom_padding">16dp</dimen>
+    <dimen name="reviews_left_right_padding">16dp</dimen>
 
 </resources>
