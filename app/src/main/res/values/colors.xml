@@ -10,4 +10,6 @@
     <color name="textColorLabelWithColorBackground">#FFFFFF</color>
     <color name="labelBackground">#00bcd4</color>
     <color name="dividerColor">#e0e0e0</color>
+
+    <color name="trailerTitleColor">#00bcd4</color>
 </resources>

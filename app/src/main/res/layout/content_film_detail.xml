@@ -103,6 +103,35 @@
                 android:paddingTop="@dimen/padding_top"
                 android:textSize="@dimen/paragraph_text_size"/>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/margin_right_left"
+                android:layout_marginRight="@dimen/margin_right_left"
+                android:background="@color/dividerColor"
+                android:paddingLeft="@dimen/left_right_padding"
+                android:paddingRight="@dimen/left_right_padding"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/padding_bottom"
+                android:paddingLeft="@dimen/left_right_padding"
+                android:paddingRight="@dimen/left_right_padding"
+                android:paddingTop="@dimen/padding_top"
+                android:textSize="@dimen/subtitle_text_size"
+                android:textColor="@color/trailerTitleColor"
+                android:text="@string/trailers_list_title"/>
+
+            <ListView
+                android:id="@+id/listview_trailers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding_bottom"
+                android:paddingLeft="@dimen/left_right_padding"
+                android:paddingRight="@dimen/left_right_padding"/>
+
         </LinearLayout>
 
     </ScrollView>

@@ -11,4 +11,6 @@
 
     <!-- Film detailed activity -->
     <string name="title_activity_film_detail">Movie details</string>
+    <string name="trailers_list_title">Trailers</string>
+    <string name="YOUTUBE_BASE_URL">https://www.youtube.com/watch?v=</string>
 </resources>
