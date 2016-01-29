@@ -7,6 +7,6 @@ You will need to incert your API key in gradle.properties file by adding the fol
 To obtain the API key you need to create an account here https://www.themoviedb.org/account/signup in order to request the key. 
 
 ####Screenshots
-<img src="https://cloud.githubusercontent.com/assets/6324839/12528056/fd5bd2c8-c13f-11e5-8c85-44f4191ff2fc.png" height="600" width="338">
-<img src="https://cloud.githubusercontent.com/assets/6324839/12528058/fd5e26e0-c13f-11e5-8972-157228dd0c10.png" height="600" width="338">
+<img src="https://cloud.githubusercontent.com/assets/6324839/12669968/75328c14-c619-11e5-8f33-23b1f2b3e35c.png" height="600" width="338">
+<img src="https://cloud.githubusercontent.com/assets/6324839/12669971/79f482fc-c619-11e5-9175-360207ab037f.png" height="600" width="338">
 
