@@ -16,4 +16,5 @@
     <string name="YOUTUBE_BASEURL">http://www.youtube.com/watch?v=</string>
     <string name="title_activity_movie_reviews">MovieReviewsActivity</string>
     <string name="reviews_button_text">Read Reviews</string>
+    <string name="favourites_action">Favourites</string>
 </resources>

@@ -34,7 +34,7 @@
             android:name=".MovieDetailActivity"
             android:label="@string/title_activity_film_detail"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.squirrel.popularmoviesapp.MainActivity"/>
@@ -43,7 +43,7 @@
             android:name=".MovieReviewsActivity"
             android:label="@string/title_activity_movie_reviews"
             android:parentActivityName=".MovieDetailActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.squirrel.popularmoviesapp.MovieDetailActivity"/>
