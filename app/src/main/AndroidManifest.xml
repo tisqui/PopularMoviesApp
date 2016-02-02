@@ -48,6 +48,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.squirrel.popularmoviesapp.MovieDetailActivity"/>
         </activity>
+        <provider
+            android:authorities="com.squirrel.popularmoviesapp"
+            android:name=".data.MoviesProvider"/>
     </application>
 
 </manifest>
