@@ -3,7 +3,6 @@ package com.squirrel.popularmoviesapp.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 
 /**
  * Created by squirrel on 1/31/16.
@@ -29,7 +28,7 @@ public class MoviesDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_MOVIES_TABLE = "CREATE TABLE " + Tables.MOVIES + " (" +
-                BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                MoviesContract.MoviesEntry.MOVIE_ID + " TEXT PRIMARY KEY," +
                 MoviesContract.MoviesEntry.MOVIE_TITLE + " TEXT NOT NULL, " +
                 MoviesContract.MoviesEntry.MOVIE_RELEASE_DATE + " TEXT, " +
                 MoviesContract.MoviesEntry.MOVIE_OVERVIEW + " TEXT, " +
@@ -38,24 +37,24 @@ public class MoviesDB extends SQLiteOpenHelper {
                 MoviesContract.MoviesEntry.MOVIE_POSTER_PATH + " TEXT); ";
 
         final String SQL_CREATE_TRAILERS_TABLE = "CREATE TABLE " + Tables.TRAILERS + " (" +
-                BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                MoviesContract.TrailersEntry.MOVIE_KEY + " INTEGER NOT NULL, " +
+                MoviesContract.TrailersEntry.TRAILER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                MoviesContract.TrailersEntry.MOVIE_KEY + " TEXT NOT NULL, " +
                 MoviesContract.TrailersEntry.TRAILER_KEY + " TEXT NOT NULL, " +
                 MoviesContract.TrailersEntry.TRAILER_NAME + " TEXT, " +
 
                 // Set up the movie_key column as a foreign key to movies table.
                 " FOREIGN KEY (" + MoviesContract.TrailersEntry.MOVIE_KEY + ") REFERENCES " +
-                        Tables.MOVIES + " (" + MoviesContract.MoviesEntry._ID + "));";
+                        Tables.MOVIES + " (" + MoviesContract.MoviesEntry.MOVIE_ID + "));";
 
         final String SQL_CREATE_REVIEWS_TABLE = "CREATE TABLE " + Tables.REVIEWS + " (" +
-                BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                MoviesContract.ReviewEntry.MOVIE_KEY + " INTEGER NOT NULL, " +
+                MoviesContract.ReviewEntry.REVIEW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                MoviesContract.ReviewEntry.MOVIE_KEY + " TEXT NOT NULL, " +
                 MoviesContract.ReviewEntry.REVIEW_AUTHOR + " TEXT NOT NULL, " +
                 MoviesContract.ReviewEntry.REVIEW_CONTENT + " TEXT, " +
 
                 // Set up the movie_key column as a foreign key to movies table.
                 " FOREIGN KEY (" + MoviesContract.ReviewEntry.MOVIE_KEY + ") REFERENCES " +
-                Tables.MOVIES + " (" + MoviesContract.MoviesEntry._ID + "));";
+                Tables.MOVIES + " (" + MoviesContract.MoviesEntry.MOVIE_ID + "));";
 
         db.execSQL(SQL_CREATE_MOVIES_TABLE);
         db.execSQL(SQL_CREATE_REVIEWS_TABLE);

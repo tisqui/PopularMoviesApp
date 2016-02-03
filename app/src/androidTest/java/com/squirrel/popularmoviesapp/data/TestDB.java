@@ -55,7 +55,7 @@ public class TestDB extends AndroidTestCase {
 
         // Build a HashSet of all of the column names we want to look for
         final HashSet<String> moviesColumnHashSet = new HashSet<String>();
-        moviesColumnHashSet.add(MoviesContract.MoviesEntry._ID);
+        moviesColumnHashSet.add(MoviesContract.MoviesEntry.MOVIE_ID);
         moviesColumnHashSet.add(MoviesContract.MoviesEntry.MOVIE_TITLE);
         moviesColumnHashSet.add(MoviesContract.MoviesEntry.MOVIE_OVERVIEW);
         moviesColumnHashSet.add(MoviesContract.MoviesEntry.MOVIE_POSTER_PATH);
@@ -129,16 +129,16 @@ public class TestDB extends AndroidTestCase {
         long reviewRowId = db.insert(MoviesDB.Tables.REVIEWS, null, reviewsTableValues);
         assertTrue(reviewRowId != -1);
 
-        Cursor weatherCursor = db.query(MoviesDB.Tables.REVIEWS,null, null, null, null, null, null);
+        Cursor reviewsCursor = db.query(MoviesDB.Tables.REVIEWS,null, null, null, null, null, null);
 
-        assertTrue( "Error: No Records returned from trailer query", weatherCursor.moveToFirst() );
+        assertTrue( "Error: No Records returned from trailer query", reviewsCursor.moveToFirst() );
         TestUtil.validateCurrentRecord("testInsertReadDb moviesEntry failed to validate",
-                weatherCursor, reviewsTableValues);
+                reviewsCursor, reviewsTableValues);
 
         assertFalse("Error: More than one record returned from movies query",
-                weatherCursor.moveToNext());
+                reviewsCursor.moveToNext());
 
-        weatherCursor.close();
+        reviewsCursor.close();
         moviesDB.close();
     }
 

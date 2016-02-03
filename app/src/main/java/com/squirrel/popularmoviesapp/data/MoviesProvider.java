@@ -39,7 +39,7 @@ public class MoviesProvider extends ContentProvider {
                         " ON " + MoviesDB.Tables.TRAILERS +
                         "." + MoviesContract.TrailersEntry.MOVIE_KEY +
                         " = " + MoviesDB.Tables.MOVIES +
-                        "." + MoviesContract.MoviesEntry._ID);
+                        "." + MoviesContract.MoviesEntry.MOVIE_ID);
 
         //reviews INNER JOIN movies ON reviews.movie_id = movies._id
         sReviewsByMovieQueryBuilder.setTables(
@@ -48,7 +48,7 @@ public class MoviesProvider extends ContentProvider {
                         " ON " + MoviesDB.Tables.REVIEWS +
                         "." + MoviesContract.ReviewEntry.MOVIE_KEY +
                         " = " + MoviesDB.Tables.MOVIES +
-                        "." + MoviesContract.MoviesEntry._ID);
+                        "." + MoviesContract.MoviesEntry.MOVIE_ID);
     }
 
     private static final String sTrailerMovieSettings =
@@ -98,6 +98,30 @@ public class MoviesProvider extends ContentProvider {
             case MOVIES: {
                 retCursor = mMoviesDB.getReadableDatabase().query(
                         MoviesDB.Tables.MOVIES,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case TRAILERS: {
+                retCursor = mMoviesDB.getReadableDatabase().query(
+                        MoviesDB.Tables.TRAILERS,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case REVIEWS: {
+                retCursor = mMoviesDB.getReadableDatabase().query(
+                        MoviesDB.Tables.REVIEWS,
                         projection,
                         selection,
                         selectionArgs,

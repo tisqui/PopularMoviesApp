@@ -1,5 +1,6 @@
 package com.squirrel.popularmoviesapp;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.squirrel.popularmoviesapp.API.MoviesAPIService;
+import com.squirrel.popularmoviesapp.data.DBDataLoader;
+import com.squirrel.popularmoviesapp.data.MoviesContract;
 import com.squirrel.popularmoviesapp.model.Movie;
 
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ public class MainActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private RecyclerGridViewAdapter mRecyclerGridViewAdapter;
     private String mSortOrder;
+    private final String MOVIES_FRAGMENT_TAG = "FFTAG";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +46,10 @@ public class MainActivity extends BaseActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_recycler_view);
 
         //Set the number of columns in the grid depending on the orientation
-        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
             mRecyclerView.setLayoutManager(gridLayoutManager);
-        }
-        else{
+        } else {
             gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
             mRecyclerView.setLayoutManager(gridLayoutManager);
         }
@@ -78,19 +82,24 @@ public class MainActivity extends BaseActivity {
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 mSortOrder = sharedPref.getString(getString(R.string.order_key_text), getString(R.string.order_setting_default_value));
 
-                MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
-                apiService.getMovies(mSortOrder, Integer.toString(page), new MoviesAPIService.APICallback<List<Movie>>() {
-                    @Override
-                    public void onSuccess(List<Movie> result) {
-                        mRecyclerGridViewAdapter.addImagesToGrid(result);
-                    }
+                if (mSortOrder.equals("favorites")) {
+                    //load the data from DB
+                } else {
 
-                    @Override
-                    public void onFailure(Throwable t) {
-                        Log.e(LOG_TAG, t.getLocalizedMessage());
-                        Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
+                    MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
+                    apiService.getMovies(mSortOrder, Integer.toString(page), new MoviesAPIService.APICallback<List<Movie>>() {
+                        @Override
+                        public void onSuccess(List<Movie> result) {
+                            mRecyclerGridViewAdapter.addImagesToGrid(result);
+                        }
+
+                        @Override
+                        public void onFailure(Throwable t) {
+                            Log.e(LOG_TAG, t.getLocalizedMessage());
+                            Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
         });
 
@@ -106,20 +115,32 @@ public class MainActivity extends BaseActivity {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             mSortOrder = sharedPref.getString(getString(R.string.order_key_text), getString(R.string.order_setting_default_value));
 
-            String page = "1";
-            MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
-            apiService.getMovies(mSortOrder, page, new MoviesAPIService.APICallback<List<Movie>>() {
-                @Override
-                public void onSuccess(List<Movie> result) {
-                    mRecyclerGridViewAdapter.updateImagesInGrid(result);
+            if (mSortOrder.equals("favorites")) {
+                //load the data from DB
+                ContentResolver contentResolver = this.getContentResolver();
+                DBDataLoader loader = new DBDataLoader(this, MoviesContract.MoviesEntry.CONTENT_URI,contentResolver, null);
+                List<Movie> movies = loader.loadInBackground();
+                if(movies != null){
+                    mRecyclerGridViewAdapter.updateImagesInGrid(movies);
                 }
 
-                @Override
-                public void onFailure(Throwable t) {
-                    Log.e(LOG_TAG, t.getLocalizedMessage());
-                    Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
+            } else {
+
+                String page = "1";
+                MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
+                apiService.getMovies(mSortOrder, page, new MoviesAPIService.APICallback<List<Movie>>() {
+                    @Override
+                    public void onSuccess(List<Movie> result) {
+                        mRecyclerGridViewAdapter.updateImagesInGrid(result);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e(LOG_TAG, t.getLocalizedMessage());
+                        Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
         }
     }
 

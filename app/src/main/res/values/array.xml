@@ -4,12 +4,14 @@
         <item>Most popular</item>
         <item>Highest rated</item>
         <item>Most votes</item>
+        <item>Favorites</item>
     </string-array>
 
     <string-array name="order_values">
         <item>popularity.desc</item>
         <item>vote_average.desc</item>
         <item>vote_count.desc</item>
+        <item>favorites</item>
     </string-array>
 
 
