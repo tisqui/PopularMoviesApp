@@ -37,7 +37,7 @@ public class MoviesDB extends SQLiteOpenHelper {
                 MoviesContract.MoviesEntry.MOVIE_POSTER_PATH + " TEXT); ";
 
         final String SQL_CREATE_TRAILERS_TABLE = "CREATE TABLE " + Tables.TRAILERS + " (" +
-                MoviesContract.TrailersEntry.TRAILER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                MoviesContract.TrailersEntry.TRAILER_ID + " TEXT PRIMARY KEY," +
                 MoviesContract.TrailersEntry.MOVIE_KEY + " TEXT NOT NULL, " +
                 MoviesContract.TrailersEntry.TRAILER_KEY + " TEXT NOT NULL, " +
                 MoviesContract.TrailersEntry.TRAILER_NAME + " TEXT, " +
@@ -47,7 +47,7 @@ public class MoviesDB extends SQLiteOpenHelper {
                         Tables.MOVIES + " (" + MoviesContract.MoviesEntry.MOVIE_ID + "));";
 
         final String SQL_CREATE_REVIEWS_TABLE = "CREATE TABLE " + Tables.REVIEWS + " (" +
-                MoviesContract.ReviewEntry.REVIEW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                MoviesContract.ReviewEntry.REVIEW_ID + " TEXT PRIMARY KEY," +
                 MoviesContract.ReviewEntry.MOVIE_KEY + " TEXT NOT NULL, " +
                 MoviesContract.ReviewEntry.REVIEW_AUTHOR + " TEXT NOT NULL, " +
                 MoviesContract.ReviewEntry.REVIEW_CONTENT + " TEXT, " +

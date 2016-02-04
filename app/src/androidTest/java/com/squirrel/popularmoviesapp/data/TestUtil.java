@@ -16,9 +16,13 @@ import java.util.Set;
  */
 public class TestUtil extends AndroidTestCase {
 
-    static ContentValues createMovieTableValues() {
+    public static final String TEST_TRAILER_ID = "123";
+    public static final String TEST_REVIEW_ID = "321";
+    public static final String TEST_MOVIE_ID = "test";
+
+    static ContentValues createMovieTableValues(String movieId) {
         ContentValues testValues = new ContentValues();
-        testValues.put(MoviesContract.MoviesEntry.MOVIE_ID, "test");
+        testValues.put(MoviesContract.MoviesEntry.MOVIE_ID, movieId);
         testValues.put(MoviesContract.MoviesEntry.MOVIE_TITLE, "Mad Max");
         testValues.put(MoviesContract.MoviesEntry.MOVIE_RELEASE_DATE, "2015");
         testValues.put(MoviesContract.MoviesEntry.MOVIE_VOTE_AVERAGE, "7.8");
@@ -28,8 +32,9 @@ public class TestUtil extends AndroidTestCase {
         return testValues;
     }
 
-    static ContentValues createTrailerTableValues(long movieId) {
+    static ContentValues createTrailerTableValues(String movieId, String trailerId) {
         ContentValues testValues = new ContentValues();
+        testValues.put(MoviesContract.TrailersEntry.TRAILER_KEY, trailerId);
         testValues.put(MoviesContract.TrailersEntry.MOVIE_KEY, movieId);
         testValues.put(MoviesContract.TrailersEntry.TRAILER_KEY, "2323232323");
         testValues.put(MoviesContract.TrailersEntry.TRAILER_NAME, "First trailer");
@@ -37,8 +42,9 @@ public class TestUtil extends AndroidTestCase {
         return testValues;
     }
 
-    static ContentValues createReviewTableValues(long movieId) {
+    static ContentValues createReviewTableValues(String movieId, String reviewId) {
         ContentValues testValues = new ContentValues();
+        testValues.put(MoviesContract.ReviewEntry.REVIEW_ID, reviewId);
         testValues.put(MoviesContract.ReviewEntry.MOVIE_KEY, movieId);
         testValues.put(MoviesContract.ReviewEntry.REVIEW_AUTHOR, "Author");
         testValues.put(MoviesContract.ReviewEntry.REVIEW_AUTHOR, "Content");

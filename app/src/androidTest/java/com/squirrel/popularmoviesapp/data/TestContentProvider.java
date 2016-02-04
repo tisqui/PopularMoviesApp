@@ -136,10 +136,10 @@ public class TestContentProvider extends AndroidTestCase{
         MoviesDB moviesDB = new MoviesDB(mContext);
         SQLiteDatabase db = moviesDB.getWritableDatabase();
 
-        ContentValues testValues = TestUtil.createMovieTableValues();
+        ContentValues testValues = TestUtil.createMovieTableValues(TestUtil.TEST_MOVIE_ID);
         long movieId = db.insert(MoviesDB.Tables.MOVIES, null, testValues);
 
-        ContentValues trailersValues = TestUtil.createTrailerTableValues(movieId);
+        ContentValues trailersValues = TestUtil.createTrailerTableValues(TestUtil.TEST_MOVIE_ID, TestUtil.TEST_TRAILER_ID);
 
         long trailerId = db.insert(MoviesDB.Tables.TRAILERS, null, trailersValues);
         assertTrue("Unable to Insert TrailersEntry into the Database", trailerId != -1);
@@ -160,7 +160,7 @@ public class TestContentProvider extends AndroidTestCase{
         MoviesDB moviesDB = new MoviesDB(mContext);
         SQLiteDatabase db = moviesDB.getWritableDatabase();
 
-        ContentValues testValues = TestUtil.createMovieTableValues();
+        ContentValues testValues = TestUtil.createMovieTableValues(TestUtil.TEST_MOVIE_ID);
         long moviesRowId = db.insert(MoviesDB.Tables.MOVIES, null, testValues);;
 
         Cursor moviesCursor = mContext.getContentResolver().query(
@@ -183,10 +183,10 @@ public class TestContentProvider extends AndroidTestCase{
         MoviesDB moviesDB = new MoviesDB(mContext);
         SQLiteDatabase db = moviesDB.getWritableDatabase();
 
-        ContentValues testValues = TestUtil.createMovieTableValues();
+        ContentValues testValues = TestUtil.createMovieTableValues(TestUtil.TEST_MOVIE_ID);
         long movieId = db.insert(MoviesDB.Tables.MOVIES, null, testValues);
 
-        ContentValues reviewsValues = TestUtil.createReviewTableValues(movieId);
+        ContentValues reviewsValues = TestUtil.createReviewTableValues(TestUtil.TEST_MOVIE_ID, TestUtil.TEST_REVIEW_ID);
 
         long reviewId = db.insert(MoviesDB.Tables.REVIEWS, null,reviewsValues);
         assertTrue("Unable to Insert TrailersEntry into the Database", reviewId != -1);
@@ -204,7 +204,7 @@ public class TestContentProvider extends AndroidTestCase{
     }
 
     public void testUpdateMovies() {
-        ContentValues values = TestUtil.createMovieTableValues();
+        ContentValues values = TestUtil.createMovieTableValues(TestUtil.TEST_MOVIE_ID);
 
         Uri moviesUri = mContext.getContentResolver().
                 insert(MoviesContract.MoviesEntry.CONTENT_URI, values);
@@ -248,7 +248,7 @@ public class TestContentProvider extends AndroidTestCase{
     }
 
     public void testInsertReadProvider() {
-        ContentValues testValues = TestUtil.createMovieTableValues();
+        ContentValues testValues = TestUtil.createMovieTableValues(TestUtil.TEST_MOVIE_ID);
 
         TestUtil.TestContentObserver tco = TestUtil.getTestContentObserver();
         mContext.getContentResolver().registerContentObserver(MoviesContract.MoviesEntry.CONTENT_URI, true, tco);
@@ -275,7 +275,7 @@ public class TestContentProvider extends AndroidTestCase{
 
         // Movie is added. add trailers
 
-        ContentValues trailersValues = TestUtil.createTrailerTableValues(moviesRowId);
+        ContentValues trailersValues = TestUtil.createTrailerTableValues(TestUtil.TEST_MOVIE_ID, TestUtil.TEST_TRAILER_ID);
         tco = TestUtil.getTestContentObserver();
 
         mContext.getContentResolver().registerContentObserver(MoviesContract.TrailersEntry.CONTENT_URI, true, tco);

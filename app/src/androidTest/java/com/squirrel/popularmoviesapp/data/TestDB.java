@@ -80,7 +80,7 @@ public class TestDB extends AndroidTestCase {
         MoviesDB moviesDB = new MoviesDB(mContext);
         SQLiteDatabase db = moviesDB.getWritableDatabase();
 
-        ContentValues movieValues = TestUtil.createMovieTableValues();
+        ContentValues movieValues = TestUtil.createMovieTableValues(TestUtil.TEST_MOVIE_ID);
 
         long movie_id;
         movie_id = db.insert(MoviesDB.Tables.MOVIES, null, movieValues);
@@ -95,12 +95,11 @@ public class TestDB extends AndroidTestCase {
     }
 
     public void testTrailersTable(){
-        long movieId = insertMovie();
-        assertFalse("Error: Location Not Inserted Correctly", movieId == -1L);
+        insertMovie();
 
-       MoviesDB moviesDB = new MoviesDB(mContext);
+        MoviesDB moviesDB = new MoviesDB(mContext);
         SQLiteDatabase db = moviesDB.getWritableDatabase();
-        ContentValues trailerTableValues = TestUtil.createTrailerTableValues(movieId);
+        ContentValues trailerTableValues = TestUtil.createTrailerTableValues(TestUtil.TEST_MOVIE_ID, TestUtil.TEST_TRAILER_ID);
 
         long trailerRowId = db.insert(MoviesDB.Tables.TRAILERS, null, trailerTableValues);
         assertTrue(trailerRowId != -1);
@@ -119,12 +118,12 @@ public class TestDB extends AndroidTestCase {
     }
 
     public void testReviewsTable(){
-        long movieId = insertMovie();
-        assertFalse("Error: Location Not Inserted Correctly", movieId == -1L);
+
+        insertMovie();
 
         MoviesDB moviesDB = new MoviesDB(mContext);
         SQLiteDatabase db = moviesDB.getWritableDatabase();
-        ContentValues reviewsTableValues = TestUtil.createReviewTableValues(movieId);
+        ContentValues reviewsTableValues = TestUtil.createReviewTableValues(TestUtil.TEST_MOVIE_ID, TestUtil.TEST_REVIEW_ID);
 
         long reviewRowId = db.insert(MoviesDB.Tables.REVIEWS, null, reviewsTableValues);
         assertTrue(reviewRowId != -1);
@@ -142,24 +141,24 @@ public class TestDB extends AndroidTestCase {
         moviesDB.close();
     }
 
-    public long insertMovie(){
+    public void insertMovie(){
         MoviesDB moviesDB = new MoviesDB(mContext);
         SQLiteDatabase db = moviesDB.getWritableDatabase();
-        ContentValues testValues = TestUtil.createMovieTableValues();
+        ContentValues testValues = TestUtil.createMovieTableValues(TestUtil.TEST_MOVIE_ID);
 
-        long movieId;
-        movieId = db.insert(MoviesDB.Tables.MOVIES, null, testValues);
-        assertTrue(movieId != -1);
+        long rowId;
+        rowId = db.insert(MoviesDB.Tables.MOVIES, null, testValues);
+        assertTrue(rowId != -1);
 
         Cursor cursor = db.query(MoviesDB.Tables.MOVIES,null, null, null, null, null, null);
-        assertTrue( "Error: No Records returned from movies query", cursor.moveToFirst() );
+        assertTrue("Error: No Records returned from movies query", cursor.moveToFirst());
         TestUtil.validateCurrentRecord("Error: Location Query Validation Failed",
                 cursor, testValues);
-        assertFalse( "Error: More than one record returned from movies query",
-                cursor.moveToNext() );
+        assertFalse("Error: More than one record returned from movies query",
+                cursor.moveToNext());
         cursor.close();
         db.close();
-        return movieId;
+
     }
 
 }
