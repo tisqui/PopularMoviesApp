@@ -19,8 +19,8 @@ public class DBService {
     private static final String LOG_TAG = DBService.class.getSimpleName();
     private ContentResolver mContentResolver;
 
-    public DBService(Context context, ContentResolver contentResolver) {
-        mContentResolver = contentResolver;
+    public DBService(Context context) {
+        mContentResolver = context.getContentResolver();
     }
 
     public List<Movie> getFavoriteMovies(){
@@ -43,10 +43,11 @@ public class DBService {
 
     public List<Trailer> getFavoriteMovieTrailers(String movieId){
         List<Trailer> trailerList = new ArrayList<Trailer>();
-        Cursor cursor = mContentResolver.query(MoviesContract.TrailersEntry.buildTrailerMovie(movieId),
+        String[] selectionArgs = new String[]{ movieId };
+        Cursor cursor = mContentResolver.query(MoviesContract.TrailersEntry.CONTENT_URI,
                 null,
-                null,
-                null,
+                MoviesContract.TrailersEntry.MOVIE_KEY + "=?",
+                selectionArgs,
                 null);
         if(cursor != null){
             if(cursor.moveToFirst()) {
@@ -61,10 +62,11 @@ public class DBService {
 
     public List<Review> getFavoriteMovieReviews(String movieId){
         List<Review> reviewList = new ArrayList<Review>();
-        Cursor cursor = mContentResolver.query(MoviesContract.ReviewEntry.buildReviewMovie(movieId),
+        String[] selectionArgs = new String[]{ movieId };
+        Cursor cursor = mContentResolver.query(MoviesContract.ReviewEntry.CONTENT_URI,
                 null,
-                null,
-                null,
+                MoviesContract.ReviewEntry.MOVIE_KEY+ "=?",
+                selectionArgs,
                 null);
         if(cursor != null){
             if(cursor.moveToFirst()) {
@@ -81,13 +83,18 @@ public class DBService {
         ContentValues movieValues = DataMapper.mapMovieToValues(movie);
         mContentResolver.insert(MoviesContract.MoviesEntry.CONTENT_URI, movieValues);
 
-        for(Trailer trailer : trailers){
-            ContentValues trailerValues = DataMapper.mapTrailerToValues(trailer, movie.getId());
-            mContentResolver.insert(MoviesContract.TrailersEntry.CONTENT_URI, trailerValues);
+        if (trailers != null) {
+            for(Trailer trailer : trailers){
+                ContentValues trailerValues = DataMapper.mapTrailerToValues(trailer, movie.getId());
+                mContentResolver.insert(MoviesContract.TrailersEntry.CONTENT_URI, trailerValues);
+            }
         }
-        for(Review review : reviews){
-            ContentValues reviewValues = DataMapper.mapReviewToValues(review, movie.getId());
-            mContentResolver.insert(MoviesContract.ReviewEntry.CONTENT_URI, reviewValues);
+
+        if (reviews != null) {
+            for(Review review : reviews){
+                ContentValues reviewValues = DataMapper.mapReviewToValues(review, movie.getId());
+                mContentResolver.insert(MoviesContract.ReviewEntry.CONTENT_URI, reviewValues);
+            }
         }
     }
 
@@ -99,11 +106,29 @@ public class DBService {
 
         mContentResolver.delete(MoviesContract.TrailersEntry.CONTENT_URI,
                 MoviesContract.TrailersEntry.MOVIE_KEY + " = ? ",
-                new String[] {movieId});
+                new String[]{movieId});
 
         mContentResolver.delete(MoviesContract.ReviewEntry.CONTENT_URI,
                 MoviesContract.ReviewEntry.MOVIE_KEY + " = ? ",
                 new String[] {movieId});
+    }
+
+    public void deleteAllMoviesFromFavorites(){
+        mContentResolver.delete(
+                MoviesContract.MoviesEntry.CONTENT_URI,
+                null,
+                null
+        );
+        mContentResolver.delete(
+                MoviesContract.TrailersEntry.CONTENT_URI,
+                null,
+                null
+        );
+        mContentResolver.delete(
+                MoviesContract.ReviewEntry.CONTENT_URI,
+                null,
+                null
+        );
     }
 
 }

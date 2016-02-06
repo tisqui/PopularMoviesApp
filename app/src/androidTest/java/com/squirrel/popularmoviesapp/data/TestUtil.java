@@ -8,6 +8,10 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.test.AndroidTestCase;
 
+import com.squirrel.popularmoviesapp.model.Movie;
+import com.squirrel.popularmoviesapp.model.Review;
+import com.squirrel.popularmoviesapp.model.Trailer;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -50,6 +54,60 @@ public class TestUtil extends AndroidTestCase {
         testValues.put(MoviesContract.ReviewEntry.REVIEW_AUTHOR, "Content");
         return testValues;
     }
+
+    static Movie createMovie(String id){
+        Movie movie = new Movie();
+        movie.setId(id);
+        movie.setTitle("Title of the movie");
+        movie.setHasVideo("true");
+        movie.setPosterPath("23233.jpg");
+        movie.setOverview("Overview");
+        movie.setReleaseDate("2015");
+        movie.setVoteAverage("7.5");
+        return movie;
+    }
+
+    static Review createReview(String reviewId){
+        Review review = new Review();
+        review.setId(reviewId);
+        review.setContent("Content");
+        review.setAuthor("Author");
+        return review;
+    }
+
+    static Trailer createTrailer(String trailerId){
+        Trailer trailer = new Trailer();
+        trailer.setId(trailerId);
+        trailer.setName("Name");
+        trailer.setKey("23232323");
+        return  trailer;
+    }
+
+    static boolean compareMovies(Movie movie1, Movie movie2){
+        return (movie1.getId().equals(movie2.getId()) &&
+                movie1.getTitle().equals(movie2.getTitle()) &&
+                movie1.getPosterPath().equals(movie2.getPosterPath()) &&
+                movie1.getHasVideo().equals(movie2.getHasVideo()) &&
+                movie1.getReleaseDate().equals(movie2.getReleaseDate()) &&
+                movie1.getOverview().equals(movie2.getOverview()) &&
+                movie1.getVoteAverage().equals(movie2.getVoteAverage()));
+    }
+
+    static boolean compareTrailers(Trailer trailer1, Trailer trailer2){
+        return (trailer1.getId().equals(trailer2.getId()) &&
+                trailer1.getKey().equals(trailer2.getKey()) &&
+                trailer1.getName().equals(trailer2.getName())
+                );
+    }
+
+    static boolean compareReviews(Review review1, Review review2){
+        return (review1.getId().equals(review2.getId()) &&
+                review1.getAuthor().equals(review2.getAuthor()) &&
+                review1.getContent().equals(review2.getContent())
+
+        );
+    }
+
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());

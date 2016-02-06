@@ -68,7 +68,7 @@ public class DataMapper {
         contentValues.put(MoviesContract.ReviewEntry.REVIEW_ID, review.getId());
         contentValues.put(MoviesContract.ReviewEntry.MOVIE_KEY, movieId);
         contentValues.put(MoviesContract.ReviewEntry.REVIEW_AUTHOR, review.getAuthor());
-        contentValues.put(MoviesContract.ReviewEntry.REVIEW_AUTHOR, review.getContent());
+        contentValues.put(MoviesContract.ReviewEntry.REVIEW_CONTENT, review.getContent());
         return contentValues;
     }
     
