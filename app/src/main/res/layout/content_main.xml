@@ -12,12 +12,13 @@
         android:id="@+id/application_toolbar"
         layout="@layout/toolbar"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/grid_recycler_view"
+    <fragment
         android:layout_below="@+id/application_toolbar"
+        android:id="@+id/fragment_movies_list"
+        android:name="com.squirrel.popularmoviesapp.ui.MoviesFragment"
+        tools:context="com.squirrel.popularmoviesapp.ui.MoviesFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
         />
 
 </RelativeLayout>

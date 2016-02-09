@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.squirrel.popularmoviesapp.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <include
+        android:id="@+id/application_toolbar"
+        layout="@layout/toolbar"/>
+
+    <!--
+    two-pane layout for the Items master/detail flow.
+    -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="?android:attr/dividerHorizontal"
+        android:layout_below="@+id/application_toolbar">
+
+        <fragment
+            android:id="@+id/fragment_movies_list"
+            android:name="com.squirrel.popularmoviesapp.ui.MoviesFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            />
+
+        <FrameLayout
+            android:id="@+id/movie_detail_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

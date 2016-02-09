@@ -1,34 +1,19 @@
 package com.squirrel.popularmoviesapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.squirrel.popularmoviesapp.API.MoviesAPIService;
 import com.squirrel.popularmoviesapp.data.DBService;
-import com.squirrel.popularmoviesapp.model.Movie;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.squirrel.popularmoviesapp.ui.MoviesFragment;
 
 public class MainActivity extends BaseActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-
-    private RecyclerView mRecyclerView;
-    private RecyclerGridViewAdapter mRecyclerGridViewAdapter;
-    private String mSortOrder;
-    private final String MOVIES_FRAGMENT_TAG = "FFTAG";
     public DBService mDBService;
+    private boolean mTwoPane;
 
 
     @Override
@@ -41,69 +26,25 @@ public class MainActivity extends BaseActivity {
 
         mDBService = new DBService(this);
 
-        mSortOrder = getString(R.string.order_setting_default_value);
-
-        //Create RecyclerView
-        mRecyclerView = (RecyclerView) findViewById(R.id.grid_recycler_view);
-
-        //Set the number of columns in the grid depending on the orientation
-        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-            mRecyclerView.setLayoutManager(gridLayoutManager);
+        if (findViewById(R.id.movie_detail_container) != null) {
+            // The detail container view will be present only in the large-screen layouts
+            // (res/layout-sw600dp). If this view is present, then the activity should be
+            // in two-pane mode.
+            mTwoPane = true;
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            if (savedInstanceState == null) {
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.movie_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+//                        .commit();
+            }
         } else {
-            gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
-            mRecyclerView.setLayoutManager(gridLayoutManager);
+            mTwoPane = false;
         }
 
-        mRecyclerGridViewAdapter = new RecyclerGridViewAdapter(MainActivity.this, new ArrayList<Movie>());
-        mRecyclerView.setAdapter(mRecyclerGridViewAdapter);
-
-        //set the on touch listener for the RecyclerView. The same action for tap and long tap
-        mRecyclerView.addOnItemTouchListener(new MovieClickListener(this, mRecyclerView,
-                new MovieClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
-                        intent.putExtra(FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onItemLongClick(View view, int position) {
-                        Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
-                        intent.putExtra(FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
-                        startActivity(intent);
-                    }
-                }));
-
-        //set the scroll listener for the recycler view
-        mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                mSortOrder = sharedPref.getString(getString(R.string.order_key_text), getString(R.string.order_setting_default_value));
-
-                if (mSortOrder.equals("favorites")) {
-                    //no load more for movies from DB
-
-                } else {
-
-                    MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
-                    apiService.getMovies(mSortOrder, Integer.toString(page), new MoviesAPIService.APICallback<List<Movie>>() {
-                        @Override
-                        public void onSuccess(List<Movie> result) {
-                            mRecyclerGridViewAdapter.addImagesToGrid(result);
-                        }
-
-                        @Override
-                        public void onFailure(Throwable t) {
-                            Log.e(LOG_TAG, t.getLocalizedMessage());
-                            Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
+        MoviesFragment moviesFragment = ((MoviesFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_movies_list));
 
     }
 
@@ -113,36 +54,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mRecyclerGridViewAdapter != null) {
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            mSortOrder = sharedPref.getString(getString(R.string.order_key_text), getString(R.string.order_setting_default_value));
 
-            if (mSortOrder.equals("favorites")) {
-                //load the data from DB
-                List<Movie> moviesFromDB = mDBService.getFavoriteMovies();
-                if(moviesFromDB.isEmpty() || moviesFromDB ==null){
-                    Toast.makeText(getApplicationContext(), "There are no movies in Favorites", Toast.LENGTH_LONG).show();
-                } else{
-                    mRecyclerGridViewAdapter.addImagesToGrid(moviesFromDB);
-                }
-
-            } else {
-                String page = "1";
-                MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
-                apiService.getMovies(mSortOrder, page, new MoviesAPIService.APICallback<List<Movie>>() {
-                    @Override
-                    public void onSuccess(List<Movie> result) {
-                        mRecyclerGridViewAdapter.updateImagesInGrid(result);
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t) {
-                        Log.e(LOG_TAG, t.getLocalizedMessage());
-                        Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        }
     }
 
 

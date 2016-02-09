@@ -1,4 +1,4 @@
-package com.squirrel.popularmoviesapp.API;
+package com.squirrel.popularmoviesapp.api;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

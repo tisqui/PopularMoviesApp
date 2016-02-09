@@ -1,4 +1,4 @@
-package com.squirrel.popularmoviesapp.API;
+package com.squirrel.popularmoviesapp.api;
 
 import com.squirrel.popularmoviesapp.model.Movie;
 import com.squirrel.popularmoviesapp.model.ResponseWrapper;

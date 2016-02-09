@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.squirrel.popularmoviesapp.API.MoviesAPIService;
+import com.squirrel.popularmoviesapp.api.MoviesAPIService;
 import com.squirrel.popularmoviesapp.model.Movie;
 import com.squirrel.popularmoviesapp.model.Review;
 

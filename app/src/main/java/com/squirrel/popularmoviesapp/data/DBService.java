@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import com.squirrel.popularmoviesapp.model.Movie;
 import com.squirrel.popularmoviesapp.model.Review;
@@ -23,12 +24,18 @@ public class DBService {
         mContentResolver = context.getContentResolver();
     }
 
+
     public List<Movie> getFavoriteMovies(){
+        return getMovies(null, null);
+    }
+
+    @NonNull
+    private List<Movie> getMovies(String selection, String[] selectionArgs) {
         List<Movie> moviesList = new ArrayList<Movie>();
         Cursor cursor = mContentResolver.query(MoviesContract.MoviesEntry.CONTENT_URI,
                 null,
-                null,
-                null,
+                selection,
+                selectionArgs,
                 null);
         if(cursor != null){
             if(cursor.moveToFirst()) {
@@ -130,5 +137,16 @@ public class DBService {
                 null
         );
     }
+
+    public boolean isFavorite(String movieId){
+        List<Movie> result = getMovies(MoviesContract.MoviesEntry.MOVIE_ID + "=?", new String[] {movieId});
+        if(result.isEmpty()){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
 
 }
