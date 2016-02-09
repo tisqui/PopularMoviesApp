@@ -109,7 +109,7 @@ public class TestDBService extends AndroidTestCase {
     }
 
     public void testGetFavoriteMoviesFromDB(){
-        List<Movie> result = new ArrayList<Movie>();
+        List<Movie> result;
         List<Movie> initialList = new ArrayList<Movie>();
         deleteAllRecordsFromContentProvider();
 
@@ -129,7 +129,7 @@ public class TestDBService extends AndroidTestCase {
     }
 
     public void testGetFavoriteTrailersFromDB(){
-        List<Trailer> result = new ArrayList<Trailer>();
+        List<Trailer> result;
         List<Trailer> initialList = new ArrayList<Trailer>();
         deleteAllRecordsFromContentProvider();
         Movie movie = TestUtil.createMovie("1");
@@ -151,7 +151,7 @@ public class TestDBService extends AndroidTestCase {
     }
 
     public void testGetFavoriteReviewsFromDB(){
-        List<Review> result = new ArrayList<Review>();
+        List<Review> result;
         List<Review> initialList = new ArrayList<Review>();
         deleteAllRecordsFromContentProvider();
         Movie movie = TestUtil.createMovie("1");
@@ -170,5 +170,42 @@ public class TestDBService extends AndroidTestCase {
             equals = TestUtil.compareReviews(initialList.get(i), result.get(i));
         }
         assertTrue("Error: Reviews returned from DB do not equal the actual reviews", equals);
+    }
+
+    public void testDeletingFromFavorites(){
+        deleteAllRecordsFromContentProvider();
+        List<Movie> result;
+        List<Movie> initialList = new ArrayList<Movie>();
+        deleteAllRecordsFromContentProvider();
+
+        for(int i = 0; i<10; i++){
+            Movie movie = TestUtil.createMovie(String.valueOf(i));
+            mDBService.saveToFavorites(movie, null, null);
+            initialList.add(movie);
+        }
+        mDBService.deleteFromFavorites("0");
+        Cursor cursor = mContext.getContentResolver().query(
+                MoviesContract.MoviesEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        assertEquals("Error: Movie is not deleted", 9, cursor.getCount());
+        cursor.close();
+
+        for(int i = 1; i<10; i++){
+            mDBService.deleteFromFavorites(String.valueOf(i));
+        }
+        cursor = mContext.getContentResolver().query(
+                MoviesContract.MoviesEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        assertEquals("Error: Movies are not deleted", 0, cursor.getCount());
+        cursor.close();
+
     }
 }

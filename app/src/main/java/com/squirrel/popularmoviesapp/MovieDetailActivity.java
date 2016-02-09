@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.squirrel.popularmoviesapp.API.MoviesAPIService;
+import com.squirrel.popularmoviesapp.data.DBService;
 import com.squirrel.popularmoviesapp.model.Movie;
 import com.squirrel.popularmoviesapp.model.Trailer;
 
@@ -49,9 +50,14 @@ public class MovieDetailActivity extends BaseActivity {
     @Bind(R.id.listview_trailers)
     ListView mListViewTrailers;
 
+    @Bind(R.id.add_to_favorites)
+    ImageView mAddToFavorites;
+
     private ArrayList<Trailer> mArrayListOfTrailers;
     private TrailersListAdapter mTrailersListAdapter;
     private Movie mMovie;
+    private Boolean mIsFavorite;
+    private DBService mDBService;
 
 
     @Override
@@ -69,6 +75,15 @@ public class MovieDetailActivity extends BaseActivity {
         mMovieTitle.setText(mMovie .getTitle());
         mYearLabel.setText(mMovie.getReleaseDate());
         mVotesLabel.setText("Rating: " + mMovie .getVoteAverage() + "/10");
+
+        //check if the film is favorite
+        mDBService = new DBService(getApplicationContext());
+        checkIfFavorite();
+        if(mIsFavorite){
+            mAddToFavorites.setImageResource(R.drawable.ic_bookmark);
+        }else{
+            mAddToFavorites.setImageResource(R.drawable.ic_bookmark_outline_plus);
+        }
 
         //Load the film poster image in the ImageView
         Picasso.with(this).load(mMovie .getFullPosterUrl())
@@ -92,6 +107,22 @@ public class MovieDetailActivity extends BaseActivity {
             }
         });
 
+        mAddToFavorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mIsFavorite){
+                    mDBService.deleteFromFavorites(mMovie.getId());
+                    mIsFavorite = false;
+                    mAddToFavorites.setImageResource(R.drawable.ic_bookmark_outline_plus);
+                    Toast.makeText(getApplicationContext(), "Movie deleted from favorites", Toast.LENGTH_LONG).show();
+                }else{
+                    mDBService.saveToFavorites(mMovie, null, null);
+                    mIsFavorite = true;
+                    mAddToFavorites.setImageResource(R.drawable.ic_bookmark);
+                    Toast.makeText(getApplicationContext(), "Movie added to favorites", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
     }
 
@@ -107,6 +138,7 @@ public class MovieDetailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         if(mTrailersListAdapter != null){
             MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
             apiService.getTrailers(mMovie.getId(), new MoviesAPIService.APICallback<List<Trailer>>() {
@@ -114,10 +146,6 @@ public class MovieDetailActivity extends BaseActivity {
                 public void onSuccess(List<Trailer> result) {
                     mTrailersListAdapter.addAll(result);
 
-//                    ViewGroup.LayoutParams params = mListViewTrailers.getLayoutParams();
-//                    params.height = result.size() * 64;
-//                    mListViewTrailers.setLayoutParams(params);
-//                    mListViewTrailers.requestLayout();
                 }
 
                 @Override
@@ -137,6 +165,7 @@ public class MovieDetailActivity extends BaseActivity {
 
     }
 
+
     //play youtube video in the youtube app our in the webview if there is no player
     public void playTrailer(String videoKey) {
         try{
@@ -147,6 +176,16 @@ public class MovieDetailActivity extends BaseActivity {
             Intent intent=new Intent(Intent.ACTION_VIEW,
                     Uri.parse(getString(R.string.YOUTUBE_BASEURL)+videoKey));
             startActivity(intent);
+        }
+    }
+
+    private void checkIfFavorite(){
+        List<Movie> favoriteMovies = mDBService.getFavoriteMovies();
+        mIsFavorite = false;
+        for(Movie item : favoriteMovies){
+            if(item.getId().equals(mMovie.getId())){
+                mIsFavorite = true;
+            }
         }
     }
 

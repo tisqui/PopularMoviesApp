@@ -1,6 +1,5 @@
 package com.squirrel.popularmoviesapp;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -15,8 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.squirrel.popularmoviesapp.API.MoviesAPIService;
-import com.squirrel.popularmoviesapp.data.DBDataLoader;
-import com.squirrel.popularmoviesapp.data.MoviesContract;
+import com.squirrel.popularmoviesapp.data.DBService;
 import com.squirrel.popularmoviesapp.model.Movie;
 
 import java.util.ArrayList;
@@ -30,6 +28,7 @@ public class MainActivity extends BaseActivity {
     private RecyclerGridViewAdapter mRecyclerGridViewAdapter;
     private String mSortOrder;
     private final String MOVIES_FRAGMENT_TAG = "FFTAG";
+    public DBService mDBService;
 
 
     @Override
@@ -39,6 +38,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getToolbar();
+
+        mDBService = new DBService(this);
 
         mSortOrder = getString(R.string.order_setting_default_value);
 
@@ -83,7 +84,8 @@ public class MainActivity extends BaseActivity {
                 mSortOrder = sharedPref.getString(getString(R.string.order_key_text), getString(R.string.order_setting_default_value));
 
                 if (mSortOrder.equals("favorites")) {
-                    //load the data from DB
+                    //no load more for movies from DB
+
                 } else {
 
                     MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
@@ -117,15 +119,14 @@ public class MainActivity extends BaseActivity {
 
             if (mSortOrder.equals("favorites")) {
                 //load the data from DB
-                ContentResolver contentResolver = this.getContentResolver();
-                DBDataLoader loader = new DBDataLoader(this, MoviesContract.MoviesEntry.CONTENT_URI,contentResolver, null);
-                List<Movie> movies = loader.loadInBackground();
-                if(movies != null){
-                    mRecyclerGridViewAdapter.updateImagesInGrid(movies);
+                List<Movie> moviesFromDB = mDBService.getFavoriteMovies();
+                if(moviesFromDB.isEmpty() || moviesFromDB ==null){
+                    Toast.makeText(getApplicationContext(), "There are no movies in Favorites", Toast.LENGTH_LONG).show();
+                } else{
+                    mRecyclerGridViewAdapter.addImagesToGrid(moviesFromDB);
                 }
 
             } else {
-
                 String page = "1";
                 MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
                 apiService.getMovies(mSortOrder, page, new MoviesAPIService.APICallback<List<Movie>>() {

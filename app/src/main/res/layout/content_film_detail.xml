@@ -87,10 +87,12 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/add_to_favorites"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/title_block_layout"
-                    android:src="@drawable/ic_bookmark_outline_plus"/>
+                    android:src="@drawable/ic_bookmark_outline_plus"
+                    android:clickable="true"/>
 
             </RelativeLayout>
 
