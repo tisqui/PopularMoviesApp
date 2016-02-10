@@ -7,13 +7,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.squirrel.popularmoviesapp.data.DBService;
+import com.squirrel.popularmoviesapp.model.Movie;
+import com.squirrel.popularmoviesapp.ui.MovieDetailsFragment;
 import com.squirrel.popularmoviesapp.ui.MoviesFragment;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements MoviesFragment.Callback{
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     public DBService mDBService;
     private boolean mTwoPane;
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    private boolean isFirstLaunch = true;
 
 
     @Override
@@ -26,30 +30,24 @@ public class MainActivity extends BaseActivity {
 
         mDBService = new DBService(this);
 
-        if (findViewById(R.id.movie_detail_container) != null) {
+        MoviesFragment moviesFragment = ((MoviesFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_movies_list));
+
+        if (findViewById(R.id.fragment_movie_detail) != null) {
             // The detail container view will be present only in the large-screen layouts
             // (res/layout-sw600dp). If this view is present, then the activity should be
             // in two-pane mode.
             mTwoPane = true;
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
             if (savedInstanceState == null) {
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.movie_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
-//                        .commit();
+                //check if need to do anything
             }
         } else {
             mTwoPane = false;
         }
-
-        MoviesFragment moviesFragment = ((MoviesFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_movies_list));
-
     }
 
     /**
-     * Update the RecyclerView data when the settings were changed
+     * Update the data
      */
     @Override
     protected void onResume() {
@@ -65,6 +63,42 @@ public class MainActivity extends BaseActivity {
         return true;
     }
 
+    public void onItemSelected(Movie movie) {
+        if(isFirstLaunch){
+            isFirstLaunch = false;
+            if(mTwoPane){
+                Bundle args = new Bundle();
+                args.putSerializable(BaseActivity.FILM_DETAILS_KEY, movie);
+
+                MovieDetailsFragment detailsFragment = new MovieDetailsFragment();
+                detailsFragment.setArguments(args);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_movie_detail, detailsFragment, DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        }else {
+            if (mTwoPane) {
+                // In two-pane mode, show the detail view in this activity by
+                // adding or replacing the detail fragment using a
+                // fragment transaction.
+                Bundle args = new Bundle();
+                args.putSerializable(BaseActivity.FILM_DETAILS_KEY, movie);
+
+                MovieDetailsFragment detailsFragment = new MovieDetailsFragment();
+                detailsFragment.setArguments(args);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_movie_detail, detailsFragment, DETAILFRAGMENT_TAG)
+                        .commit();
+            } else {
+                Intent intent = new Intent(this, MovieDetailActivity.class);
+                intent.putExtra(BaseActivity.FILM_DETAILS_KEY, movie);
+                startActivity(intent);
+            }
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -75,6 +109,18 @@ public class MainActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private Movie getTestMovie(){
+        Movie movie = new Movie();
+        movie.setId("112133343453453");
+        movie.setTitle("Title of the movie");
+        movie.setHasVideo("true");
+        movie.setPosterPath("23233.jpg");
+        movie.setOverview("Overview");
+        movie.setReleaseDate("2015");
+        movie.setVoteAverage("7.5");
+        return movie;
     }
 
 }

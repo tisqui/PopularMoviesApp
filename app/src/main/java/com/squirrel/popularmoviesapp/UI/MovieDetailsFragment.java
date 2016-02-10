@@ -85,58 +85,69 @@ public class MovieDetailsFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         mMovie = (Movie) intent.getSerializableExtra(BaseActivity.FILM_DETAILS_KEY);
 
-        //set the film data to the views
-        mMovieTitle.setText(mMovie.getTitle());
-        mYearLabel.setText(mMovie.getReleaseDate());
-        mVotesLabel.setText("Rating: " + mMovie.getVoteAverage() + "/10");
-
-        //check if the film is favorite
-        mDBService = new DBService(getActivity().getApplicationContext());
-        mIsFavorite = mDBService.isFavorite(mMovie.getId());
-        if (mIsFavorite) {
-            mAddToFavorites.setImageResource(R.drawable.ic_bookmark);
-        } else {
-            mAddToFavorites.setImageResource(R.drawable.ic_bookmark_outline_plus);
+        //check if it works for the phone
+        if(mMovie == null){
+            Bundle extras = getArguments();
+            mMovie = (Movie) extras.getSerializable(BaseActivity.FILM_DETAILS_KEY);
         }
 
-        //Load the film poster image in the ImageView
-        Picasso.with(getActivity()).load(mMovie.getFullPosterUrl())
-                .error(R.drawable.placeholder)
-                .placeholder(R.drawable.placeholder)
-                .into(mMoviePoster);
+        if(mMovie != null) {
+            //set the film data to the views
+            mMovieTitle.setText(mMovie.getTitle());
+            mYearLabel.setText(mMovie.getReleaseDate());
+            mVotesLabel.setText("Rating: " + mMovie.getVoteAverage() + "/10");
 
-        mMovieDescription.setText(mMovie.getOverview());
-
-        //set the list of trailers
-        mArrayListOfTrailers = new ArrayList<Trailer>();
-        mTrailersListAdapter = new TrailersListAdapter(getActivity(), mArrayListOfTrailers);
-        mListViewTrailers.setAdapter(mTrailersListAdapter);
-
-        mReviewsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MovieReviewsActivity.class);
-                intent.putExtra(BaseActivity.REVIEWS_KEY, mMovie);
-                startActivityForResult(intent, 1);
+            //check if the film is favorite
+            mDBService = new DBService(getActivity().getApplicationContext());
+            mIsFavorite = mDBService.isFavorite(mMovie.getId());
+            if (mIsFavorite) {
+                mAddToFavorites.setImageResource(R.drawable.ic_bookmark);
+            } else {
+                mAddToFavorites.setImageResource(R.drawable.ic_bookmark_outline_plus);
             }
-        });
 
-        mAddToFavorites.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mIsFavorite) {
-                    mDBService.deleteFromFavorites(mMovie.getId());
-                    mIsFavorite = false;
-                    mAddToFavorites.setImageResource(R.drawable.ic_bookmark_outline_plus);
-                    Toast.makeText(getActivity().getApplicationContext(), "Movie deleted from favorites", Toast.LENGTH_LONG).show();
-                } else {
-                    mDBService.saveToFavorites(mMovie, null, null);
-                    mIsFavorite = true;
-                    mAddToFavorites.setImageResource(R.drawable.ic_bookmark);
-                    Toast.makeText(getActivity().getApplicationContext(), "Movie added to favorites", Toast.LENGTH_LONG).show();
+            //Load the film poster image in the ImageView
+            Picasso.with(getActivity()).load(mMovie.getFullPosterUrl())
+                    .error(R.drawable.placeholder)
+                    .placeholder(R.drawable.placeholder)
+                    .into(mMoviePoster);
+
+            mMovieDescription.setText(mMovie.getOverview());
+
+            //set the list of trailers
+            mArrayListOfTrailers = new ArrayList<Trailer>();
+            mTrailersListAdapter = new TrailersListAdapter(getActivity(), mArrayListOfTrailers);
+            mListViewTrailers.setAdapter(mTrailersListAdapter);
+
+            mReviewsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), MovieReviewsActivity.class);
+                    intent.putExtra(BaseActivity.REVIEWS_KEY, mMovie);
+                    startActivityForResult(intent, 1);
                 }
-            }
-        });
+            });
+
+            mAddToFavorites.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mIsFavorite) {
+                        mDBService.deleteFromFavorites(mMovie.getId());
+                        mIsFavorite = false;
+                        mAddToFavorites.setImageResource(R.drawable.ic_bookmark_outline_plus);
+                        Toast.makeText(getActivity().getApplicationContext(), "Movie deleted from favorites", Toast.LENGTH_LONG).show();
+                    } else {
+                        mDBService.saveToFavorites(mMovie, null, null);
+                        mIsFavorite = true;
+                        mAddToFavorites.setImageResource(R.drawable.ic_bookmark);
+                        Toast.makeText(getActivity().getApplicationContext(), "Movie added to favorites", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+        else {
+            mMovieTitle.setText("No data loaded");
+        }
 
         return rootView;
     }

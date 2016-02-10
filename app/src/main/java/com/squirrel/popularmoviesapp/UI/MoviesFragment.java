@@ -1,12 +1,11 @@
 package com.squirrel.popularmoviesapp.ui;
 
-import android.support.v4.app.Fragment;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,14 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.squirrel.popularmoviesapp.api.MoviesAPIService;
-import com.squirrel.popularmoviesapp.BaseActivity;
 import com.squirrel.popularmoviesapp.BuildConfig;
 import com.squirrel.popularmoviesapp.EndlessRecyclerViewScrollListener;
 import com.squirrel.popularmoviesapp.MovieClickListener;
-import com.squirrel.popularmoviesapp.MovieDetailActivity;
 import com.squirrel.popularmoviesapp.R;
 import com.squirrel.popularmoviesapp.RecyclerGridViewAdapter;
+import com.squirrel.popularmoviesapp.api.MoviesAPIService;
 import com.squirrel.popularmoviesapp.data.DBService;
 import com.squirrel.popularmoviesapp.model.Movie;
 
@@ -39,8 +36,16 @@ public class MoviesFragment extends Fragment{
     private RecyclerGridViewAdapter mRecyclerGridViewAdapter;
     private String mSortOrder;
     public DBService mDBService;
+    private int mPosition = RecyclerView.NO_POSITION;
 
     private static final String SELECTED_KEY = "selected_position";
+
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Movie movie);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -78,18 +83,30 @@ public class MoviesFragment extends Fragment{
                 new MovieClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(getActivity().getApplicationContext(), MovieDetailActivity.class);
-                        intent.putExtra(BaseActivity.FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
-                        startActivity(intent);
+                            ((Callback) getActivity())
+                                    .onItemSelected(mRecyclerGridViewAdapter.getImage(position));
+                        mPosition = position;
+
                     }
 
                     @Override
                     public void onItemLongClick(View view, int position) {
-                        Intent intent = new Intent(getActivity().getApplicationContext(), MovieDetailActivity.class);
-                        intent.putExtra(BaseActivity.FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
-                        startActivity(intent);
+//                        Intent intent = new Intent(getActivity().getApplicationContext(), MovieDetailActivity.class);
+//                        intent.putExtra(BaseActivity.FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
+//                        startActivity(intent);
                     }
                 }));
+
+        // If there's instance state, mine it for useful information.
+        // The end-goal here is that the user never knows that turning their device sideways
+        // does crazy lifecycle related things.  It should feel like some stuff stretched out,
+        // or magically appeared to take advantage of room, but data or place in the app was never
+        // actually *lost*.
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            // The listview probably hasn't even been populated yet.  Actually perform the
+            // swapout in onLoadFinished.
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
 
         //set the scroll listener for the recycler view
         mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
@@ -123,7 +140,16 @@ public class MoviesFragment extends Fragment{
         return rootView;
     }
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // When tablets rotate, the currently selected list item needs to be saved.
+        // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
+        // so check for that before storing.
+        if (mPosition != RecyclerView.NO_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onResume() {
@@ -149,8 +175,13 @@ public class MoviesFragment extends Fragment{
                     public void onSuccess(List<Movie> result) {
                         mRecyclerGridViewAdapter.updateImagesInGrid(result);
                         Log.d(LOG_TAG, "" + result.size());
-                        for(Movie item : result){
+                        for (Movie item : result) {
                             Log.d(LOG_TAG, item.toString());
+                        }
+                        //if this is the first show of the Detail view
+                        if (mPosition == RecyclerView.NO_POSITION){
+                            ((Callback) getActivity())
+                                    .onItemSelected(mRecyclerGridViewAdapter.getImage(0));
                         }
                     }
 
@@ -160,6 +191,9 @@ public class MoviesFragment extends Fragment{
                         Toast.makeText(getActivity().getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
+            }
+            if (mPosition != RecyclerView.NO_POSITION) {
+                mRecyclerView.smoothScrollToPosition(mPosition);
             }
         }
     }
