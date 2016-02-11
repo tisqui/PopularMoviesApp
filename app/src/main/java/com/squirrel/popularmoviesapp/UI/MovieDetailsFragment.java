@@ -9,6 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,12 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
-import com.squirrel.popularmoviesapp.api.MoviesAPIService;
 import com.squirrel.popularmoviesapp.BaseActivity;
 import com.squirrel.popularmoviesapp.BuildConfig;
 import com.squirrel.popularmoviesapp.MovieReviewsActivity;
 import com.squirrel.popularmoviesapp.R;
 import com.squirrel.popularmoviesapp.TrailersListAdapter;
+import com.squirrel.popularmoviesapp.api.MoviesAPIService;
 import com.squirrel.popularmoviesapp.data.DBService;
 import com.squirrel.popularmoviesapp.model.Movie;
 import com.squirrel.popularmoviesapp.model.Trailer;
@@ -81,12 +84,15 @@ public class MovieDetailsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         ButterKnife.bind(this, rootView);
 
+        //menu in fragment
+        setHasOptionsMenu(true);
+
         //get the film data from the Intent
         Intent intent = getActivity().getIntent();
         mMovie = (Movie) intent.getSerializableExtra(BaseActivity.FILM_DETAILS_KEY);
 
-        //check if it works for the phone
-        if(mMovie == null){
+        //get the movie data from the arguments
+        if(mMovie == null) {
             Bundle extras = getArguments();
             mMovie = (Movie) extras.getSerializable(BaseActivity.FILM_DETAILS_KEY);
         }
@@ -146,7 +152,7 @@ public class MovieDetailsFragment extends Fragment {
             });
         }
         else {
-            mMovieTitle.setText("No data loaded");
+            Toast.makeText(getContext(), "Film information was not properly passed to the fragment", Toast.LENGTH_SHORT).show();
         }
 
         return rootView;
@@ -200,5 +206,41 @@ public class MovieDetailsFragment extends Fragment {
                     Uri.parse(getString(R.string.YOUTUBE_BASEURL) + videoKey));
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_movie_detail, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_share) {
+            shareTrailerURL();
+            return true;
+        }
+        if(id == R.id.action_settings){
+            //this is the activity's menu item
+            return false;
+        }
+        return false;
+    }
+
+    private void shareTrailerURL(){
+        //get trailer's link
+        Trailer trailer = mTrailersListAdapter.getItem(0);
+        if (trailer != null) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, trailer.getYoutubeVideoLink());
+            startActivity(Intent.createChooser(shareIntent, "Share trailer link using"));
+        }
+        else {
+            Toast.makeText(getContext(), "There is no trailers to share", Toast.LENGTH_LONG).show();
+        }
+
     }
 }

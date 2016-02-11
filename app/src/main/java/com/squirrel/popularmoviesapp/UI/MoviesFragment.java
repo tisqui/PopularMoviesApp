@@ -91,20 +91,14 @@ public class MoviesFragment extends Fragment{
 
                     @Override
                     public void onItemLongClick(View view, int position) {
-//                        Intent intent = new Intent(getActivity().getApplicationContext(), MovieDetailActivity.class);
-//                        intent.putExtra(BaseActivity.FILM_DETAILS_KEY, mRecyclerGridViewAdapter.getImage(position));
-//                        startActivity(intent);
+                        ((Callback) getActivity())
+                                .onItemSelected(mRecyclerGridViewAdapter.getImage(position));
+                        mPosition = position;
                     }
                 }));
 
-        // If there's instance state, mine it for useful information.
-        // The end-goal here is that the user never knows that turning their device sideways
-        // does crazy lifecycle related things.  It should feel like some stuff stretched out,
-        // or magically appeared to take advantage of room, but data or place in the app was never
-        // actually *lost*.
+        // If there's instance state, get the last selected position
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
-            // The listview probably hasn't even been populated yet.  Actually perform the
-            // swapout in onLoadFinished.
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
@@ -116,8 +110,7 @@ public class MoviesFragment extends Fragment{
                 mSortOrder = sharedPref.getString(getString(R.string.order_key_text), getString(R.string.order_setting_default_value));
 
                 if (mSortOrder.equals("favorites")) {
-                    //no load more for movies from DB
-
+                    //no load more for movies from DB, all films are loaded at once
                 } else {
 
                     MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
@@ -168,7 +161,9 @@ public class MoviesFragment extends Fragment{
                 }
 
             } else {
-                String page = "1";
+                String page = getString(R.string.first_page_movies_api);
+
+                //get movies from API
                 MoviesAPIService apiService = new MoviesAPIService(BuildConfig.MY_API_KEY);
                 apiService.getMovies(mSortOrder, page, new MoviesAPIService.APICallback<List<Movie>>() {
                     @Override
@@ -193,10 +188,10 @@ public class MoviesFragment extends Fragment{
                 });
             }
             if (mPosition != RecyclerView.NO_POSITION) {
+                //when the movie item was shown previously
                 mRecyclerView.smoothScrollToPosition(mPosition);
             }
         }
     }
-
 
 }

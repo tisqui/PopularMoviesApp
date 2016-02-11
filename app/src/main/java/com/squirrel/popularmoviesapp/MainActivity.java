@@ -17,7 +17,7 @@ public class MainActivity extends BaseActivity implements MoviesFragment.Callbac
     public DBService mDBService;
     private boolean mTwoPane;
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
-    private boolean isFirstLaunch = true;
+    private boolean isFirstLaunch = true; //the flag to define if the app was launched for the first time
 
 
     @Override
@@ -34,25 +34,11 @@ public class MainActivity extends BaseActivity implements MoviesFragment.Callbac
                 .findFragmentById(R.id.fragment_movies_list));
 
         if (findViewById(R.id.fragment_movie_detail) != null) {
-            // The detail container view will be present only in the large-screen layouts
-            // (res/layout-sw600dp). If this view is present, then the activity should be
-            // in two-pane mode.
+            // The application is in two pane mode
             mTwoPane = true;
-            if (savedInstanceState == null) {
-                //check if need to do anything
-            }
         } else {
             mTwoPane = false;
         }
-    }
-
-    /**
-     * Update the data
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
 
@@ -67,30 +53,11 @@ public class MainActivity extends BaseActivity implements MoviesFragment.Callbac
         if(isFirstLaunch){
             isFirstLaunch = false;
             if(mTwoPane){
-                Bundle args = new Bundle();
-                args.putSerializable(BaseActivity.FILM_DETAILS_KEY, movie);
-
-                MovieDetailsFragment detailsFragment = new MovieDetailsFragment();
-                detailsFragment.setArguments(args);
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_movie_detail, detailsFragment, DETAILFRAGMENT_TAG)
-                        .commit();
+                setDetailsFragmentForTablet(movie);
             }
         }else {
             if (mTwoPane) {
-                // In two-pane mode, show the detail view in this activity by
-                // adding or replacing the detail fragment using a
-                // fragment transaction.
-                Bundle args = new Bundle();
-                args.putSerializable(BaseActivity.FILM_DETAILS_KEY, movie);
-
-                MovieDetailsFragment detailsFragment = new MovieDetailsFragment();
-                detailsFragment.setArguments(args);
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_movie_detail, detailsFragment, DETAILFRAGMENT_TAG)
-                        .commit();
+                setDetailsFragmentForTablet(movie);
             } else {
                 Intent intent = new Intent(this, MovieDetailActivity.class);
                 intent.putExtra(BaseActivity.FILM_DETAILS_KEY, movie);
@@ -101,26 +68,42 @@ public class MainActivity extends BaseActivity implements MoviesFragment.Callbac
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+//        int id = item.getItemId();
+//
+//        if (id == R.id.action_settings) {
+//            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+//            startActivity(settingsIntent);
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
 
-        if (id == R.id.action_settings) {
-            Intent settingsIntent = new Intent(this, SettingsActivity.class);
-            startActivity(settingsIntent);
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // Activity action
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            case R.id.action_share:
+                // Not implemented here, this is the fragment action in 2-pane mode
+                return false;
+            default:
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
-    private Movie getTestMovie(){
-        Movie movie = new Movie();
-        movie.setId("112133343453453");
-        movie.setTitle("Title of the movie");
-        movie.setHasVideo("true");
-        movie.setPosterPath("23233.jpg");
-        movie.setOverview("Overview");
-        movie.setReleaseDate("2015");
-        movie.setVoteAverage("7.5");
-        return movie;
+    private void setDetailsFragmentForTablet(Movie movie){
+        Bundle args = new Bundle();
+        args.putSerializable(BaseActivity.FILM_DETAILS_KEY, movie);
+
+        //pass the movie object to the fragment
+        MovieDetailsFragment detailsFragment = new MovieDetailsFragment();
+        detailsFragment.setArguments(args);
+
+        //start fragment transaction
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_movie_detail, detailsFragment, DETAILFRAGMENT_TAG)
+                .commit();
     }
 
 }

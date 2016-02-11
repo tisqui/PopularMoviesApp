@@ -17,4 +17,6 @@
     <string name="title_activity_movie_reviews">MovieReviewsActivity</string>
     <string name="reviews_button_text">Read Reviews</string>
     <string name="favourites_action">Favourites</string>
+    <string name="first_page_movies_api">1</string>
+    <string name="share_menu_action">Share</string>
 </resources>
