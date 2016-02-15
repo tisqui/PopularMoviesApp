@@ -83,14 +83,15 @@ public class MoviesFragment extends Fragment{
                 new MovieClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        mRecyclerGridViewAdapter.onClick(view, position);
                             ((Callback) getActivity())
                                     .onItemSelected(mRecyclerGridViewAdapter.getImage(position));
                         mPosition = position;
-
                     }
 
                     @Override
                     public void onItemLongClick(View view, int position) {
+                        mRecyclerGridViewAdapter.onClick(view, position);
                         ((Callback) getActivity())
                                 .onItemSelected(mRecyclerGridViewAdapter.getImage(position));
                         mPosition = position;

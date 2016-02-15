@@ -20,6 +20,7 @@ public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolde
     private List<Movie> mImagesList;
     private Context mContext;
     private final String LOG_TAG = RecyclerGridViewAdapter.class.getSimpleName();
+    private int mSelectedPosition = 0;
 
     public RecyclerGridViewAdapter(Context context, List<Movie> mImagesList) {
         mContext = context;
@@ -36,6 +37,7 @@ public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolde
     @Override
     public void onBindViewHolder(ImageViewHolder holder, int position) {
         Movie movieItem = mImagesList.get(position);
+        holder.itemView.setSelected(mSelectedPosition == position);
         Log.d(LOG_TAG, "Processing the item: " + movieItem.getTitle() + " " + position);
         Picasso.with(mContext).load(movieItem.getFullPosterUrl())
                 .error(R.drawable.placeholder)
@@ -65,5 +67,12 @@ public class RecyclerGridViewAdapter extends RecyclerView.Adapter<ImageViewHolde
             return mImagesList.get(position);
         }
         return null;
+    }
+
+    public void onClick(View view, int position) {
+        int old_position = mSelectedPosition;
+        mSelectedPosition = position;
+        notifyItemChanged(old_position);
+        notifyItemChanged(mSelectedPosition);
     }
 }
