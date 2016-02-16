@@ -15,5 +15,5 @@ To obtain the API key you need to create an account here https://www.themoviedb.
 ####Screenshots
 <img src="https://cloud.githubusercontent.com/assets/6324839/12669968/75328c14-c619-11e5-8f33-23b1f2b3e35c.png" height="600" width="338">
 <img src="https://cloud.githubusercontent.com/assets/6324839/12669971/79f482fc-c619-11e5-9175-360207ab037f.png" height="600" width="338">
-<img src="https://cloud.githubusercontent.com/assets/6324839/12995838/76bc7358-d0df-11e5-9929-cd2e7b959488.png"  width="1200">
+<img src="https://cloud.githubusercontent.com/assets/6324839/13069394/473ae314-d439-11e5-8de8-e0556befd17a.png"  width="1200">
 
